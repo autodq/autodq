@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>autodq — вход</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;family=Montserrat+Alternates:wght@600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#0E0F12}a:hover{color:#4F6413}
+.m{font-family:'JetBrains Mono',ui-monospace,Menlo,monospace}
+
+.lg .ring{fill:none;stroke:#F2F2EE;stroke-width:14;stroke-linecap:round;stroke-dasharray:100;animation:rDraw 1.6s cubic-bezier(.65,0,.35,1) .3s both}
+@keyframes rDraw{from{stroke-dashoffset:100}to{stroke-dashoffset:0}}
+.lg .orbit{transform-box:view-box;transform-origin:54px 54px;animation:orbit 1.6s cubic-bezier(.65,0,.35,1) .3s both}
+@keyframes orbit{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.lg .drop{animation:drop .6s cubic-bezier(.65,0,.35,1) 1.95s both}
+@keyframes drop{from{transform:translateY(0)}to{transform:translateY(30px)}}
+.lg .core{transform-box:fill-box;transform-origin:50% 50%;animation:coreIn .4s cubic-bezier(.22,1,.36,1) .1s both,coreGrow .7s cubic-bezier(.22,1,.36,1) 2.05s forwards,breathe 2.6s cubic-bezier(.45,0,.55,1) 3s infinite alternate}
+@keyframes coreIn{from{transform:scale(0)}to{transform:scale(1)}}
+@keyframes coreGrow{from{transform:scale(1)}to{transform:scale(2.67)}}
+@keyframes breathe{from{transform:scale(2.67)}to{transform:scale(2.4)}}
+.lg .tail{fill:none;stroke:#F2F2EE;stroke-width:14;stroke-linecap:round;stroke-dasharray:100;animation:rDraw .6s cubic-bezier(.65,0,.35,1) 2.3s both}
+
+.up{animation:up .7s cubic-bezier(.22,1,.36,1) both}
+.d1{animation-delay:.08s}.d2{animation-delay:.16s}.d3{animation-delay:.24s}.d4{animation-delay:.32s}.d5{animation-delay:.4s}
+.late{animation-delay:2.6s}.late2{animation-delay:2.75s}.late3{animation-delay:2.9s}
+@keyframes up{from{opacity:0;transform:translateY(14px);filter:blur(4px)}to{opacity:1;transform:none;filter:blur(0)}}
+
+.pr .arc{transform-box:view-box;transform-origin:60px 60px;animation:spin 1.4s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.field{display:flex;flex-direction:column;gap:8px}
+.field label{font-size:13px;font-weight:600}
+.field input{height:52px;border-radius:12px;border:1px solid #D6D6CF;background:#FFFFFF;padding:0 16px;font:500 15px 'JetBrains Mono',ui-monospace,monospace;color:#0E0F12;outline:none;transition:border-color .25s,box-shadow .25s}
+.field input:focus{border-color:#0E0F12;box-shadow:0 0 0 4px #EEF5D9}
+.cta{position:relative;display:flex;align-items:center;justify-content:center;gap:10px;height:54px;border-radius:12px;background:#0E0F12;color:#F2F2EE;text-decoration:none;font-weight:600;font-size:16px;overflow:hidden;transition:transform .4s cubic-bezier(.22,1,.36,1)}
+.cta:hover{color:#F2F2EE;transform:translateY(-1px)}
+.cta i{width:8px;height:8px;border-radius:50%;background:#C9EC5F;transition:transform .4s cubic-bezier(.22,1,.36,1)}
+.cta:hover i{transform:scale(1.5)}
+.wm{font-family:'Montserrat Alternates','Montserrat',system-ui,sans-serif;font-weight:600;letter-spacing:-0.045em}
+.ghost{display:flex;align-items:center;justify-content:center;gap:10px;height:52px;border-radius:12px;border:1px solid #D6D6CF;background:#FFFFFF;color:#0E0F12;font:500 15px 'Onest',system-ui,sans-serif;cursor:pointer;transition:border-color .25s}
+.ghost:hover{border-color:#0E0F12}
+.seg{position:relative;display:flex;padding:4px;border-radius:14px;background:#E6E6E0}
+.seg button{flex:1;height:42px;border:0;border-radius:10px;background:transparent;font:500 14px 'Onest',system-ui,sans-serif;color:#66686E;cursor:pointer;position:relative;z-index:1;transition:color .35s}
+.seg button.on{color:#0E0F12}
+.pill{position:absolute;top:4px;left:4px;width:calc(50% - 4px);height:42px;border-radius:10px;background:#FFFFFF;box-shadow:0 1px 2px rgba(14,15,18,.06),0 6px 16px rgba(14,15,18,.06);transition:transform .5s cubic-bezier(.65,0,.35,1)}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+</style>
+</helmet>
+<div style="min-height: 100vh; background: #F2F2EE; color: #0E0F12; font-family: 'Onest', system-ui, sans-serif; display: flex; flex-wrap: wrap">
+
+  <section style="flex: 1 1 520px; min-height: 560px; background: #0E0F12; color: #F2F2EE; padding: 48px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; gap: 40px">
+    <div style="display: flex; align-items: center; gap: 12px">
+      <svg viewBox="0 0 120 120" aria-hidden="true" style="width: 30px; height: 30px; margin: 3px 0 0 3px"><circle cx="54" cy="54" r="30" fill="none" stroke="#F2F2EE" stroke-width="16"></circle><path d="M84 56 V104" stroke="#F2F2EE" stroke-width="16" stroke-linecap="round"></path><circle cx="54" cy="54" r="12" fill="#C9EC5F"></circle></svg>
+      <span class="wm" style="font-size: 22px">autodq</span>
+    </div>
+
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 40px">
+      <svg class="lg" viewBox="0 0 120 120" aria-hidden="true" style="width: 240px; height: 240px; overflow: visible">
+        <circle cx="54" cy="54" r="30" fill="none" stroke="#1C1D22" stroke-width="14"></circle>
+        <g style="transform-box: view-box; transform-origin: 54px 54px; transform: rotate(-90deg)"><circle class="ring" cx="54" cy="54" r="30" pathLength="100"></circle></g>
+        <path class="tail" d="M84 56 V112" pathLength="100"></path>
+        <g class="orbit"><g class="drop"><circle class="core" cx="54" cy="24" r="4.5" fill="#C9EC5F"></circle></g></g>
+      </svg>
+      <div class="pr" style="width: 100%; max-width: 420px; display: flex; flex-direction: column; gap: 2px">
+        <sc-for list="{{feed}}" as="f" hint-placeholder-count="3">
+          <div class="m up {{f.cls}}" style="display: grid; grid-template-columns: 22px 1fr auto; gap: 14px; align-items: center; height: 44px; border-bottom: 1px solid #1F2025; font-size: 13px">
+            <svg viewBox="0 0 120 120" aria-hidden="true" style="width: 20px; height: 20px; overflow: visible"><circle cx="60" cy="60" r="36" fill="none" stroke="#2A2B31" stroke-width="18"></circle><sc-if value="{{f.run}}" hint-placeholder-val="{{ false }}"><g class="arc"><g style="transform-box: view-box; transform-origin: 60px 60px; transform: rotate(-90deg)"><circle cx="60" cy="60" r="36" fill="none" stroke="#F2F2EE" stroke-width="18" stroke-linecap="round" pathLength="100" style="stroke-dasharray: 22 78; stroke-dashoffset: 22"></circle></g><circle cx="60" cy="24" r="10" fill="#C9EC5F"></circle></g></sc-if><sc-if value="{{f.ok}}" hint-placeholder-val="{{ true }}"><circle cx="60" cy="60" r="36" fill="none" stroke="#F2F2EE" stroke-width="18"></circle><circle cx="60" cy="60" r="14" fill="#C9EC5F"></circle></sc-if></svg>
+            <span style="color: #F2F2EE">{{f.name}}</span>
+            <span style="color: #8C8E94">{{f.st}}</span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+
+    <div class="m" style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; font-size: 12px; color: #8C8E94">
+      <span>v0.1 · прототип</span>
+      <span style="display: flex; align-items: center; gap: 8px"><i style="width: 6px; height: 6px; border-radius: 50%; background: #C9EC5F"></i>все сервисы работают</span>
+    </div>
+  </section>
+
+  <section style="flex: 1 1 480px; display: flex; align-items: center; justify-content: center; padding: 56px 24px; box-sizing: border-box">
+    <div style="width: 100%; max-width: 400px; display: flex; flex-direction: column; gap: 28px">
+      <div class="up d1" style="display: flex; flex-direction: column; gap: 8px">
+        <h1 style="margin: 0; font-size: 30px; font-weight: 600; letter-spacing: -0.02em">{{heading}}</h1>
+        <p style="margin: 0; font-size: 15px; line-height: 1.5; color: #66686E">{{sub}}</p>
+      </div>
+      <div class="seg up d2">
+        <div class="pill" style="transform: translateX({{pillX}})"></div>
+        <button type="button" class="{{tLogin}}" onClick="{{toLogin}}">Вход</button>
+        <button type="button" class="{{tLic}}" onClick="{{toLic}}">Активация лицензии</button>
+      </div>
+
+      <sc-if value="{{isLogin}}" hint-placeholder-val="{{ true }}">
+        <div style="display: flex; flex-direction: column; gap: 18px">
+          <div class="field up d1"><label for="em">Рабочая почта</label><input id="em" type="email" value="name@company.kz" readOnly="{{ true }}"></div>
+          <div class="field up d2">
+            <div style="display: flex; justify-content: space-between"><label for="pw">Пароль</label><a href="#" style="font-size: 13px; font-weight: 600; color: #66686E; text-decoration: none">Забыли пароль?</a></div>
+            <input id="pw" type="password" value="password123" readOnly="{{ true }}">
+          </div>
+          <a class="cta up d3" href="App.dc.html">Войти<i></i></a>
+          <div class="up d4" style="display: flex; align-items: center; gap: 12px; color: #66686E; font-size: 13px"><span style="flex: 1; height: 1px; background: #D6D6CF"></span>или<span style="flex: 1; height: 1px; background: #D6D6CF"></span></div>
+          <button type="button" class="ghost up d5">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10" width="16" height="10" rx="2"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3"></path></svg>
+            Войти через SSO
+          </button>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{isLic}}" hint-placeholder-val="{{ false }}">
+        <div style="display: flex; flex-direction: column; gap: 18px">
+          <div class="field up d1"><label for="key">Лицензионный ключ</label><input id="key" type="text" value="ADQ-7K2M-94QX-T3LP" readOnly="{{ true }}"></div>
+          <div class="field up d2"><label for="org">Организация</label><input id="org" type="text" value="[Название компании]" readOnly="{{ true }}"></div>
+          <div class="up d3" style="display: flex; gap: 12px; align-items: flex-start; padding: 14px 16px; border-radius: 12px; background: #EEF5D9; font-size: 14px; line-height: 1.45; color: #2D3A0B">
+            <i style="flex-shrink: 0; width: 8px; height: 8px; margin-top: 6px; border-radius: 50%; background: #0E0F12"></i>
+            <span>Без ключа доступен пробный период: 14 дней, до 5 наборов данных.</span>
+          </div>
+          <a class="cta up d4" href="App.dc.html">Активировать<i></i></a>
+        </div>
+      </sc-if>
+
+      <p class="up d5" style="margin: 0; font-size: 13px; color: #66686E">Нет доступа — напишите администратору вашей организации.</p>
+    </div>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"mode":{"editor":"enum","options":["login","lic"],"default":"login"},"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { mode: props.mode === 'lic' ? 'lic' : 'login' }; }
+  renderVals() {
+    const login = this.state.mode === 'login';
+    return {
+      feed: [
+        { name: 'sales.orders', st: '176 / 184 правил', ok: true, run: false, cls: 'late' },
+        { name: 'billing.payments', st: '131 / 132 правил', ok: true, run: false, cls: 'late2' },
+        { name: 'finance.ledger', st: 'профилирование', ok: false, run: true, cls: 'late3' }
+      ],
+      isLogin: login,
+      isLic: !login,
+      tLogin: login ? 'on' : '',
+      tLic: login ? '' : 'on',
+      pillX: login ? '0%' : '100%',
+      heading: login ? 'Вход' : 'Активация',
+      sub: login ? 'Войдите в рабочее пространство вашей команды.' : 'Введите ключ, полученный при покупке или от администратора.',
+      toLogin: () => this.setState({ mode: 'login' }),
+      toLic: () => this.setState({ mode: 'lic' })
+    };
+  }
+}
+</script>
+</body>
+</html>

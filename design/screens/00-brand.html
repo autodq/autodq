@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="ru"><head><style>
+    .sc-placeholder{background:color-mix(in srgb,currentColor 8%,transparent);
+      border:1px solid color-mix(in srgb,currentColor 50%,transparent);
+      border-radius:2px;box-sizing:border-box;overflow:hidden}
+    @keyframes sc-shine{0%{background-position:100% 50%}100%{background-position:0% 50%}}
+    html.sc-dc-streaming .sc-placeholder,
+    html.sc-dc-streaming .sc-interp.sc-missing{position:relative;
+      background:color-mix(in srgb,currentColor 5%,transparent);
+      border-color:transparent}
+    html.sc-dc-streaming .sc-placeholder::before,
+    html.sc-dc-streaming .sc-interp.sc-missing::before{content:'';
+      position:absolute;inset:0;pointer-events:none;
+      background:linear-gradient(90deg,rgba(217,119,87,0) 25%,rgba(247,225,211,.95) 37%,rgba(217,119,87,0) 63%);
+      background-size:400% 100%;animation:sc-shine 1.4s ease infinite}
+    html.sc-dc-streaming .sc-placeholder:nth-child(n+9 of .sc-placeholder)::before,
+    html.sc-dc-streaming .sc-interp.sc-missing:nth-child(n+9 of .sc-interp.sc-missing)::before{animation:none;
+      background:color-mix(in srgb,currentColor 8%,transparent)}
+    .sc-placeholder-error{padding:4px 8px;font:11px/1.4 ui-monospace,monospace;
+      color:color-mix(in srgb,currentColor 70%,transparent);word-break:break-word}
+    .sc-interp.sc-missing{display:inline-block;width:2em;height:1em;overflow:hidden;
+      vertical-align:text-bottom;background:rgba(255,255,255,.3);border:1px solid rgba(0,0,0,.5);
+      border-radius:2px;box-sizing:border-box;color:transparent;
+      user-select:none}
+    .sc-interp.sc-unresolved{font-family:ui-monospace,monospace;font-size:.85em;
+      color:color-mix(in srgb,currentColor 50%,transparent);
+      background:color-mix(in srgb,currentColor 10%,transparent);border-radius:3px;
+      padding:0 3px}
+    .sc-host.sc-has-error{position:relative}
+    .sc-logic-error{position:absolute;top:8px;left:8px;z-index:2147483647;max-width:60ch;
+      padding:6px 10px;background:#b00020;color:#fff;font:12px/1.4 ui-monospace,monospace;
+      border-radius:4px;white-space:pre-wrap;pointer-events:none}
+    /* Mirrors PRINT_BASELINE_CSS in apps/web deck-stage-export.ts — keep both
+       in sync until dc-runtime regains a build step. */
+    @media print {
+      @page { margin: 0.5cm; }
+      figure, table { break-inside: avoid; }
+      #dc-root, #dc-root > .sc-host { height: auto; }
+      *, *::before, *::after {
+        print-color-adjust: exact; -webkit-print-color-adjust: exact;
+        backdrop-filter: none !important; -webkit-backdrop-filter: none !important;
+        animation-delay: -99s !important; animation-duration: .001s !important;
+        animation-iteration-count: 1 !important; animation-fill-mode: both !important;
+        animation-play-state: running !important; transition-duration: 0s !important;
+      }
+    }
+  </style>
+<meta charset="utf-8">
+<title>autodq — бренд</title>
+<style>x-dc{display:none!important}</style>
+<link rel="preconnect" href="https://fonts.googleapis.com" data-dc-tpl="1"><link href="https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet" data-dc-tpl="2"><style data-dc-tpl="3">
+body{margin:0}
+a{color:#0E0F12}a:hover{color:#4F6413}
+.m{font-family:'JetBrains Mono',ui-monospace,Menlo,monospace}
+.lbl{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#66686E}
+
+.hero{animation:hOut 8s infinite both}
+@keyframes hOut{0%,86%{opacity:1;transform:scale(1);animation-timing-function:cubic-bezier(.5,0,.75,0)}96%,100%{opacity:0;transform:scale(.97)}}
+.hero .ring{fill:none;stroke:#F2F2EE;stroke-width:14;stroke-linecap:round;stroke-dasharray:100;animation:rDraw 8s infinite both}
+@keyframes rDraw{0%,6%{stroke-dashoffset:100;animation-timing-function:cubic-bezier(.65,0,.35,1)}40%,100%{stroke-dashoffset:0}}
+.hero .ring2{fill:none;stroke:#F2F2EE;stroke-width:14;animation:rFill 8s infinite both}
+@keyframes rFill{0%,39%{opacity:0}40%,100%{opacity:1}}
+.hero .orbit{transform-box:view-box;transform-origin:54px 54px;animation:orbit 8s infinite both}
+@keyframes orbit{0%,6%{transform:rotate(0deg);animation-timing-function:cubic-bezier(.65,0,.35,1)}40%,100%{transform:rotate(360deg)}}
+.hero .drop{animation:drop 8s infinite both}
+@keyframes drop{0%,41%{transform:translateY(0);animation-timing-function:cubic-bezier(.65,0,.35,1)}53%,100%{transform:translateY(30px)}}
+.hero .core{transform-box:fill-box;transform-origin:50% 50%;animation:core 8s infinite both}
+@keyframes core{0%,1%{transform:scale(0);animation-timing-function:cubic-bezier(.22,1,.36,1)}6%{transform:scale(1)}43%{transform:scale(1);animation-timing-function:cubic-bezier(.22,1,.36,1)}57%,100%{transform:scale(2.67)}}
+.hero .tail{fill:none;stroke:#F2F2EE;stroke-width:14;stroke-linecap:round;stroke-dasharray:100;animation:tDraw 8s infinite both}
+@keyframes tDraw{0%,47%{stroke-dashoffset:100;animation-timing-function:cubic-bezier(.65,0,.35,1)}60%,100%{stroke-dashoffset:0}}
+.hero .glow{transform-box:fill-box;transform-origin:50% 50%;animation:glow 8s infinite both}
+@keyframes glow{0%,52%{transform:scale(.6);opacity:0}58%{opacity:.35;animation-timing-function:cubic-bezier(.22,1,.36,1)}80%,100%{transform:scale(2.2);opacity:0}}
+
+.lab{position:absolute;white-space:nowrap;opacity:0}
+.lab.l1{animation:lab1 8s infinite both}.lab.l2{animation:lab2 8s infinite both}.lab.l3{animation:lab3 8s infinite both}.lab.l4{animation:lab4 8s infinite both}
+@keyframes lab1{0%,14%{opacity:0;transform:translateY(5px)}19%,42%{opacity:1;transform:none}50%,100%{opacity:0}}
+@keyframes lab2{0%,20%{opacity:0;transform:translateY(5px)}25%,42%{opacity:1;transform:none}50%,100%{opacity:0}}
+@keyframes lab3{0%,24%{opacity:0;transform:translateY(5px)}29%,42%{opacity:1;transform:none}50%,100%{opacity:0}}
+@keyframes lab4{0%,30%{opacity:0;transform:translateY(5px)}35%,42%{opacity:1;transform:none}50%,100%{opacity:0}}
+.fin{animation:fin 8s infinite both}
+@keyframes fin{0%,58%{opacity:0;transform:translateY(6px)}66%,85%{opacity:1;transform:none;animation-timing-function:cubic-bezier(.5,0,.75,0)}94%,100%{opacity:0}}
+
+.ld .arc{animation:spin 1.4s linear infinite;transform-box:view-box;transform-origin:60px 60px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.hov{transition:transform .5s cubic-bezier(.22,1,.36,1)}
+.hov:hover{transform:translateY(-3px)}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+</style></head>
+<body>
+<div id="dc-root"><div class="sc-host" data-sc-name="Main"><div data-dc-tpl="4" style="width: 1440px; height: 1400px; box-sizing: border-box; background: rgb(242, 242, 238); color: rgb(14, 15, 18); font-family: &quot;Montserrat Alternates&quot;, Montserrat, system-ui, sans-serif; display: flex; flex-direction: column;">
+
+  <header data-dc-tpl="5" style="height: 64px; padding: 0px 64px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgb(218, 218, 211);">
+    <span data-dc-tpl="6" class="lbl">Бренд</span>
+    <span data-dc-tpl="7" class="lbl">autodq</span>
+    <span data-dc-tpl="8" class="lbl">знак и моушн · v1</span>
+  </header>
+
+  <section data-dc-tpl="9" style="display: grid; grid-template-columns: 760px 1fr; border-bottom: 1px solid rgb(218, 218, 211);">
+    <div data-dc-tpl="10" style="position: relative; height: 640px; background: rgb(14, 15, 18); color: rgb(242, 242, 238); overflow: hidden;">
+      <span data-dc-tpl="11" class="lbl" style="position: absolute; left: 32px; top: 28px; color: rgb(140, 142, 148);">Анимация · 8 s, цикл</span>
+      <div data-dc-tpl="12" class="hero" style="position: absolute; left: 50%; top: 50%; width: 360px; height: 360px; margin: -200px 0px 0px -170px;">
+        <svg data-dc-tpl="13" viewBox="0 0 120 120" aria-hidden="true" style="width: 360px; height: 360px; overflow: visible;">
+          <circle data-dc-tpl="14" cx="54" cy="54" r="30" fill="none" stroke="#1C1D22" stroke-width="14"></circle>
+          <circle data-dc-tpl="15" class="glow" cx="54" cy="54" r="12" fill="#C9EC5F"></circle>
+          <g data-dc-tpl="16" style="transform-box: view-box; transform-origin: 54px 54px; transform: rotate(-90deg);">
+            <circle data-dc-tpl="17" class="ring" cx="54" cy="54" r="30" pathLength="100"></circle>
+            <circle data-dc-tpl="18" class="ring2" cx="54" cy="54" r="30"></circle>
+          </g>
+          <path data-dc-tpl="19" class="tail" d="M84 56 V112" pathLength="100"></path>
+          <g data-dc-tpl="20" class="orbit"><g data-dc-tpl="21" class="drop"><circle data-dc-tpl="22" class="core" cx="54" cy="24" r="4.5" fill="#C9EC5F"></circle></g></g>
+        </svg>
+        <span data-dc-tpl="23" class="lab l1 m" style="left: 268px; top: 44px; font-size: 13px; color: rgb(242, 242, 238);">01 профиль</span>
+        <span data-dc-tpl="24" class="lab l2 m" style="left: 272px; top: 268px; font-size: 13px; color: rgb(242, 242, 238);">02 правила</span>
+        <span data-dc-tpl="25" class="lab l3 m" style="left: -60px; top: 268px; font-size: 13px; color: rgb(242, 242, 238);">03 проверка</span>
+        <span data-dc-tpl="26" class="lab l4 m" style="left: -44px; top: 44px; font-size: 13px; color: rgb(242, 242, 238);">04 отчёт</span>
+      </div>
+      <div data-dc-tpl="27" class="m fin" style="position: absolute; left: 0px; right: 0px; bottom: 60px; display: flex; justify-content: center; font-size: 13px; color: rgb(140, 142, 148);">данные прошли цикл и проверены</div>
+    </div>
+
+    <div data-dc-tpl="28" style="padding: 64px; display: flex; flex-direction: column; justify-content: space-between;">
+      <div data-dc-tpl="29" style="display: flex; align-items: center; gap: 24px;">
+        <div data-dc-tpl="30" style="width: 112px; height: 112px; border-radius: 28px; background: rgb(14, 15, 18); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+          <svg data-dc-tpl="31" viewBox="0 0 120 120" aria-hidden="true" style="width: 80px; height: 80px; margin: 8px 0px 0px 9px;"><circle data-dc-tpl="32" cx="54" cy="54" r="30" fill="none" stroke="#F2F2EE" stroke-width="14"></circle><path data-dc-tpl="33" d="M84 56 V104" stroke="#F2F2EE" stroke-width="14" stroke-linecap="round"></path><circle data-dc-tpl="34" cx="54" cy="54" r="12" fill="#C9EC5F"></circle></svg>
+        </div>
+        <span data-dc-tpl="35" style="font-size: 104px; font-weight: 600; letter-spacing: -0.05em; line-height: 1;">autodq</span>
+      </div>
+      <div data-dc-tpl="36" style="display: flex; flex-direction: column; gap: 22px;">
+        <p data-dc-tpl="37" style="margin: 0px; font-size: 21px; line-height: 1.5; font-weight: 500;">«auto» — это цикл из четырёх шагов: профиль, правила, проверка, отчёт. Точка данных проходит круг, кольцо замыкается, точка встаёт в центр, у кольца появляется хвост — буква q.</p>
+        <p data-dc-tpl="38" style="margin: 0px; font-size: 16px; line-height: 1.6; color: rgb(102, 104, 110);">Знак всегда стоит на чёрной подложке. Лайм — только точка внутри и маленькие отметки в интерфейсе: текущий шаг, автоматически предложенное, проверено.</p>
+      </div>
+      <div data-dc-tpl="39" class="m" style="display: grid; grid-template-columns: repeat(4, minmax(0px, 1fr)); gap: 12px; border-top: 1px solid rgb(218, 218, 211); padding-top: 20px; font-size: 12px;">
+        <div data-dc-tpl="40" style="display: flex; flex-direction: column; gap: 8px;"><i data-dc-tpl="41" style="height: 28px; border-radius: 8px; background: rgb(14, 15, 18);"></i><span data-dc-tpl="42">Ink<br data-dc-tpl="43">#0E0F12</span></div>
+        <div data-dc-tpl="44" style="display: flex; flex-direction: column; gap: 8px;"><i data-dc-tpl="45" style="height: 28px; border-radius: 8px; background: rgb(201, 236, 95);"></i><span data-dc-tpl="46">Lime<br data-dc-tpl="47">#C9EC5F</span></div>
+        <div data-dc-tpl="48" style="display: flex; flex-direction: column; gap: 8px;"><i data-dc-tpl="49" style="height: 28px; border-radius: 8px; background: rgb(238, 245, 217);"></i><span data-dc-tpl="50">Lime tint<br data-dc-tpl="51">#EEF5D9</span></div>
+        <div data-dc-tpl="52" style="display: flex; flex-direction: column; gap: 8px;"><i data-dc-tpl="53" style="height: 28px; border-radius: 8px; background: rgb(242, 242, 238); border: 1px solid rgb(218, 218, 211);"></i><span data-dc-tpl="54">Paper<br data-dc-tpl="55">#F2F2EE</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section data-dc-tpl="56" style="padding: 44px 64px; display: flex; flex-direction: column; gap: 22px; border-bottom: 1px solid rgb(218, 218, 211);">
+    <span data-dc-tpl="57" class="lbl">Раскадровка</span>
+    <div data-dc-tpl="58" style="display: grid; grid-template-columns: repeat(4, minmax(0px, 1fr)); gap: 16px;">
+      
+        <div data-dc-tpl="60" style="display: flex; flex-direction: column; gap: 12px;">
+          <div data-dc-tpl="61" style="height: 180px; background: rgb(14, 15, 18); display: flex; align-items: center; justify-content: center;">
+            <svg data-dc-tpl="62" viewBox="0 0 120 120" aria-hidden="true" style="width: 150px; height: 150px; margin: 8px 0px 0px 10px; overflow: visible;">
+              <circle data-dc-tpl="63" cx="54" cy="54" r="30" fill="none" stroke="#1C1D22" stroke-width="14"></circle>
+              <g data-dc-tpl="64" style="transform-box: view-box; transform-origin: 54px 54px; transform: rotate(-90deg);"><circle data-dc-tpl="65" cx="54" cy="54" r="30" fill="none" stroke="#F2F2EE" stroke-width="14" stroke-linecap="round" pathLength="100" style="stroke-dasharray: 100; stroke-dashoffset: 70;"></circle></g>
+              <path data-dc-tpl="66" d="M84 56 V112" fill="none" stroke="#F2F2EE" stroke-width="14" stroke-linecap="round" pathLength="100" style="stroke-dasharray: 100; stroke-dashoffset: 100;"></path>
+              <g data-dc-tpl="67" style="transform-box: view-box; transform-origin: 54px 54px; transform: rotate(108deg);"><circle data-dc-tpl="68" cx="54" cy="24" r="4.5" fill="#C9EC5F"></circle></g>
+            </svg>
+          </div>
+          <span data-dc-tpl="69" class="m" style="font-size: 12px;"><b data-dc-tpl="70"><span class="sc-interp">0.5–1.8 s</span></b> · <span class="sc-interp">точка ведёт линию</span></span>
+        </div>
+      
+        <div data-dc-tpl="60" style="display: flex; flex-direction: column; gap: 12px;">
+          <div data-dc-tpl="61" style="height: 180px; background: rgb(14, 15, 18); display: flex; align-items: center; justify-content: center;">
+            <svg data-dc-tpl="62" viewBox="0 0 120 120" aria-hidden="true" style="width: 150px; height: 150px; margin: 8px 0px 0px 10px; overflow: visible;">
+              <circle data-dc-tpl="63" cx="54" cy="54" r="30" fill="none" stroke="#1C1D22" stroke-width="14"></circle>
+              <g data-dc-tpl="64" style="transform-box: view-box; transform-origin: 54px 54px; transform: rotate(-90deg);"><circle data-dc-tpl="65" cx="54" cy="54" r="30" fill="none" stroke="#F2F2EE" stroke-width="14" stroke-linecap="round" pathLength="100" style="stroke-dasharray: 100; stroke-dashoffset: 18;"></circle></g>
+              <path data-dc-tpl="66" d="M84 56 V112" fill="none" stroke="#F2F2EE" stroke-width="14" stroke-linecap="round" pathLength="100" style="stroke-dasharray: 100; stroke-dashoffset: 100;"></path>
+              <g data-dc-tpl="67" style="transform-box: view-box; transform-origin: 54px 54px; transform: rotate(295deg);"><circle data-dc-tpl="68" cx="54" cy="24" r="4.5" fill="#C9EC5F"></circle></g>
+            </svg>
+          </div>
+          <span data-dc-tpl="69" class="m" style="font-size: 12px;"><b data-dc-tpl="70"><span class="sc-interp">1.8–3.2 s</span></b> · <span class="sc-interp">кольцо почти замкнуто</span></span>
+        </div>
+      
+        <div data-dc-tpl="60" style="display: flex; flex-direction: column; gap: 12px;">
+          <div data-dc-tpl="61" style="height: 180px; background: rgb(14, 15, 18); display: flex; align-items: center; justify-content: center;">
+            <svg data-dc-tpl="62" viewBox="0 0 120 120" aria-hidden="true" style="width: 150px; height: 150px; margin: 8px 0px 0px 10px; overflow: visible;">
+              <circle data-dc-tpl="63" cx="54" cy="54" r="30" fill="none" stroke="#1C1D22" stroke-width="14"></circle>
+              <g data-dc-tpl="64" style="transform-box: view-box; transform-origin: 54px 54px; transform: rotate(-90deg);"><circle data-dc-tpl="65" cx="54" cy="54" r="30" fill="none" stroke="#F2F2EE" stroke-width="14" stroke-linecap="round" pathLength="100" style="stroke-dasharray: 100; stroke-dashoffset: 0;"></circle></g>
+              <path data-dc-tpl="66" d="M84 56 V112" fill="none" stroke="#F2F2EE" stroke-width="14" stroke-linecap="round" pathLength="100" style="stroke-dasharray: 100; stroke-dashoffset: 100;"></path>
+              <g data-dc-tpl="67" style="transform-box: view-box; transform-origin: 54px 54px; transform: rotate(0deg);"><circle data-dc-tpl="68" cx="54" cy="42" r="8" fill="#C9EC5F"></circle></g>
+            </svg>
+          </div>
+          <span data-dc-tpl="69" class="m" style="font-size: 12px;"><b data-dc-tpl="70"><span class="sc-interp">3.3–4.3 s</span></b> · <span class="sc-interp">точка уходит в центр</span></span>
+        </div>
+      
+        <div data-dc-tpl="60" style="display: flex; flex-direction: column; gap: 12px;">
+          <div data-dc-tpl="61" style="height: 180px; background: rgb(14, 15, 18); display: flex; align-items: center; justify-content: center;">
+            <svg data-dc-tpl="62" viewBox="0 0 120 120" aria-hidden="true" style="width: 150px; height: 150px; margin: 8px 0px 0px 10px; overflow: visible;">
+              <circle data-dc-tpl="63" cx="54" cy="54" r="30" fill="none" stroke="#1C1D22" stroke-width="14"></circle>
+              <g data-dc-tpl="64" style="transform-box: view-box; transform-origin: 54px 54px; transform: rotate(-90deg);"><circle data-dc-tpl="65" cx="54" cy="54" r="30" fill="none" stroke="#F2F2EE" stroke-width="14" stroke-linecap="round" pathLength="100" style="stroke-dasharray: 100; stroke-dashoffset: 0;"></circle></g>
+              <path data-dc-tpl="66" d="M84 56 V112" fill="none" stroke="#F2F2EE" stroke-width="14" stroke-linecap="round" pathLength="100" style="stroke-dasharray: 100; stroke-dashoffset: 0;"></path>
+              <g data-dc-tpl="67" style="transform-box: view-box; transform-origin: 54px 54px; transform: rotate(0deg);"><circle data-dc-tpl="68" cx="54" cy="54" r="12" fill="#C9EC5F"></circle></g>
+            </svg>
+          </div>
+          <span data-dc-tpl="69" class="m" style="font-size: 12px;"><b data-dc-tpl="70"><span class="sc-interp">3.8–4.8 s</span></b> · <span class="sc-interp">хвост — получается q</span></span>
+        </div>
+      
+    </div>
+  </section>
+
+  <section data-dc-tpl="71" style="padding: 44px 64px; display: grid; grid-template-columns: 1fr 1fr 1.4fr; gap: 40px; flex: 1 1 0%;">
+    <div data-dc-tpl="72" style="display: flex; flex-direction: column; gap: 18px;">
+      <span data-dc-tpl="73" class="lbl">Иконка и фавикон</span>
+      <div data-dc-tpl="74" style="display: flex; align-items: flex-end; gap: 20px;">
+        <div data-dc-tpl="75" class="hov" style="width: 120px; height: 120px; border-radius: 30px; background: rgb(14, 15, 18); display: flex; align-items: center; justify-content: center;">
+          <svg data-dc-tpl="76" viewBox="0 0 120 120" aria-hidden="true" style="width: 86px; height: 86px; margin: 8px 0px 0px 10px;"><circle data-dc-tpl="77" cx="54" cy="54" r="30" fill="none" stroke="#F2F2EE" stroke-width="14"></circle><path data-dc-tpl="78" d="M84 56 V104" stroke="#F2F2EE" stroke-width="14" stroke-linecap="round"></path><circle data-dc-tpl="79" cx="54" cy="54" r="12" fill="#C9EC5F"></circle></svg>
+        </div>
+        <div data-dc-tpl="80" style="width: 48px; height: 48px; border-radius: 12px; background: rgb(14, 15, 18); display: flex; align-items: center; justify-content: center;">
+          <svg data-dc-tpl="81" viewBox="0 0 120 120" aria-hidden="true" style="width: 36px; height: 36px; margin: 3px 0px 0px 4px;"><circle data-dc-tpl="82" cx="54" cy="54" r="30" fill="none" stroke="#F2F2EE" stroke-width="16"></circle><path data-dc-tpl="83" d="M84 56 V104" stroke="#F2F2EE" stroke-width="16" stroke-linecap="round"></path><circle data-dc-tpl="84" cx="54" cy="54" r="12" fill="#C9EC5F"></circle></svg>
+        </div>
+        <div data-dc-tpl="85" style="width: 22px; height: 22px; border-radius: 6px; background: rgb(14, 15, 18); display: flex; align-items: center; justify-content: center;">
+          <svg data-dc-tpl="86" viewBox="0 0 120 120" aria-hidden="true" style="width: 17px; height: 17px; margin: 1px 0px 0px 2px;"><circle data-dc-tpl="87" cx="54" cy="54" r="30" fill="none" stroke="#F2F2EE" stroke-width="20"></circle><path data-dc-tpl="88" d="M84 56 V104" stroke="#F2F2EE" stroke-width="20" stroke-linecap="round"></path><circle data-dc-tpl="89" cx="54" cy="54" r="11" fill="#C9EC5F"></circle></svg>
+        </div>
+      </div>
+    </div>
+    <div data-dc-tpl="90" style="display: flex; flex-direction: column; gap: 18px;">
+      <span data-dc-tpl="91" class="lbl">Загрузка</span>
+      <button data-dc-tpl="92" type="button" class="ld" style="align-self: flex-start; height: 52px; padding: 0px 22px 0px 16px; display: flex; align-items: center; gap: 12px; border: 0px; border-radius: 14px; background: rgb(14, 15, 18); color: rgb(242, 242, 238); font: 600 15px &quot;Montserrat Alternates&quot;, system-ui, sans-serif;">
+        <svg data-dc-tpl="93" viewBox="0 0 120 120" aria-hidden="true" style="width: 24px; height: 24px; overflow: visible;"><circle data-dc-tpl="94" cx="60" cy="60" r="36" fill="none" stroke="#33353B" stroke-width="18"></circle><g data-dc-tpl="95" class="arc"><g data-dc-tpl="96" style="transform-box: view-box; transform-origin: 60px 60px; transform: rotate(-90deg);"><circle data-dc-tpl="97" cx="60" cy="60" r="36" fill="none" stroke="#F2F2EE" stroke-width="18" stroke-linecap="round" pathLength="100" style="stroke-dasharray: 22, 78; stroke-dashoffset: 22;"></circle></g><circle data-dc-tpl="98" cx="60" cy="24" r="10" fill="#C9EC5F"></circle></g></svg>
+        Профилирование…
+      </button>
+    </div>
+    <div data-dc-tpl="99" style="display: flex; flex-direction: column; gap: 18px;">
+      <span data-dc-tpl="100" class="lbl">Шрифты</span>
+      <div data-dc-tpl="101" style="display: flex; flex-direction: column; gap: 12px;">
+        <span data-dc-tpl="102" style="font-size: 40px; font-weight: 600; letter-spacing: -0.04em; line-height: 1;">Montserrat Alternates</span>
+        <span data-dc-tpl="103" class="m" style="font-size: 26px; font-weight: 500; letter-spacing: -0.02em;">JetBrains Mono 0.946</span>
+        <span data-dc-tpl="104" style="font-size: 14px; line-height: 1.5; color: rgb(102, 104, 110);">Alternates — заголовки и интерфейс. Mono — данные, пороги, имена колонок, правила.</span>
+      </div>
+    </div>
+  </section></div></div></div>
+
+
+
+</body></html>

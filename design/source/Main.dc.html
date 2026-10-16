@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>autodq — бренд</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#0E0F12}a:hover{color:#4F6413}
+.m{font-family:'JetBrains Mono',ui-monospace,Menlo,monospace}
+.lbl{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#66686E}
+
+.hero{animation:hOut 8s infinite both}
+@keyframes hOut{0%,86%{opacity:1;transform:scale(1);animation-timing-function:cubic-bezier(.5,0,.75,0)}96%,100%{opacity:0;transform:scale(.97)}}
+.hero .ring{fill:none;stroke:#F2F2EE;stroke-width:14;stroke-linecap:round;stroke-dasharray:100;animation:rDraw 8s infinite both}
+@keyframes rDraw{0%,6%{stroke-dashoffset:100;animation-timing-function:cubic-bezier(.65,0,.35,1)}40%,100%{stroke-dashoffset:0}}
+.hero .ring2{fill:none;stroke:#F2F2EE;stroke-width:14;animation:rFill 8s infinite both}
+@keyframes rFill{0%,39%{opacity:0}40%,100%{opacity:1}}
+.hero .orbit{transform-box:view-box;transform-origin:54px 54px;animation:orbit 8s infinite both}
+@keyframes orbit{0%,6%{transform:rotate(0deg);animation-timing-function:cubic-bezier(.65,0,.35,1)}40%,100%{transform:rotate(360deg)}}
+.hero .drop{animation:drop 8s infinite both}
+@keyframes drop{0%,41%{transform:translateY(0);animation-timing-function:cubic-bezier(.65,0,.35,1)}53%,100%{transform:translateY(30px)}}
+.hero .core{transform-box:fill-box;transform-origin:50% 50%;animation:core 8s infinite both}
+@keyframes core{0%,1%{transform:scale(0);animation-timing-function:cubic-bezier(.22,1,.36,1)}6%{transform:scale(1)}43%{transform:scale(1);animation-timing-function:cubic-bezier(.22,1,.36,1)}57%,100%{transform:scale(2.67)}}
+.hero .tail{fill:none;stroke:#F2F2EE;stroke-width:14;stroke-linecap:round;stroke-dasharray:100;animation:tDraw 8s infinite both}
+@keyframes tDraw{0%,47%{stroke-dashoffset:100;animation-timing-function:cubic-bezier(.65,0,.35,1)}60%,100%{stroke-dashoffset:0}}
+.hero .glow{transform-box:fill-box;transform-origin:50% 50%;animation:glow 8s infinite both}
+@keyframes glow{0%,52%{transform:scale(.6);opacity:0}58%{opacity:.35;animation-timing-function:cubic-bezier(.22,1,.36,1)}80%,100%{transform:scale(2.2);opacity:0}}
+
+.lab{position:absolute;white-space:nowrap;opacity:0}
+.lab.l1{animation:lab1 8s infinite both}.lab.l2{animation:lab2 8s infinite both}.lab.l3{animation:lab3 8s infinite both}.lab.l4{animation:lab4 8s infinite both}
+@keyframes lab1{0%,14%{opacity:0;transform:translateY(5px)}19%,42%{opacity:1;transform:none}50%,100%{opacity:0}}
+@keyframes lab2{0%,20%{opacity:0;transform:translateY(5px)}25%,42%{opacity:1;transform:none}50%,100%{opacity:0}}
+@keyframes lab3{0%,24%{opacity:0;transform:translateY(5px)}29%,42%{opacity:1;transform:none}50%,100%{opacity:0}}
+@keyframes lab4{0%,30%{opacity:0;transform:translateY(5px)}35%,42%{opacity:1;transform:none}50%,100%{opacity:0}}
+.fin{animation:fin 8s infinite both}
+@keyframes fin{0%,58%{opacity:0;transform:translateY(6px)}66%,85%{opacity:1;transform:none;animation-timing-function:cubic-bezier(.5,0,.75,0)}94%,100%{opacity:0}}
+
+.ld .arc{animation:spin 1.4s linear infinite;transform-box:view-box;transform-origin:60px 60px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.hov{transition:transform .5s cubic-bezier(.22,1,.36,1)}
+.hov:hover{transform:translateY(-3px)}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+</style>
+</helmet>
+<div style="width: 1440px; height: 1400px; box-sizing: border-box; background: #F2F2EE; color: #0E0F12; font-family: 'Montserrat Alternates', 'Montserrat', system-ui, sans-serif; display: flex; flex-direction: column">
+
+  <header style="height: 64px; padding: 0 64px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #DADAD3">
+    <span class="lbl">Бренд</span>
+    <span class="lbl">autodq</span>
+    <span class="lbl">знак и моушн · v1</span>
+  </header>
+
+  <section style="display: grid; grid-template-columns: 760px 1fr; border-bottom: 1px solid #DADAD3">
+    <div style="position: relative; height: 640px; background: #0E0F12; color: #F2F2EE; overflow: hidden">
+      <span class="lbl" style="position: absolute; left: 32px; top: 28px; color: #8C8E94">Анимация · 8 s, цикл</span>
+      <div class="hero" style="position: absolute; left: 50%; top: 50%; width: 360px; height: 360px; margin: -200px 0 0 -170px">
+        <svg viewBox="0 0 120 120" aria-hidden="true" style="width: 360px; height: 360px; overflow: visible">
+          <circle cx="54" cy="54" r="30" fill="none" stroke="#1C1D22" stroke-width="14"></circle>
+          <circle class="glow" cx="54" cy="54" r="12" fill="#C9EC5F"></circle>
+          <g style="transform-box: view-box; transform-origin: 54px 54px; transform: rotate(-90deg)">
+            <circle class="ring" cx="54" cy="54" r="30" pathLength="100"></circle>
+            <circle class="ring2" cx="54" cy="54" r="30"></circle>
+          </g>
+          <path class="tail" d="M84 56 V112" pathLength="100"></path>
+          <g class="orbit"><g class="drop"><circle class="core" cx="54" cy="24" r="4.5" fill="#C9EC5F"></circle></g></g>
+        </svg>
+        <span class="lab l1 m" style="left: 268px; top: 44px; font-size: 13px; color: #F2F2EE">01 профиль</span>
+        <span class="lab l2 m" style="left: 272px; top: 268px; font-size: 13px; color: #F2F2EE">02 правила</span>
+        <span class="lab l3 m" style="left: -60px; top: 268px; font-size: 13px; color: #F2F2EE">03 проверка</span>
+        <span class="lab l4 m" style="left: -44px; top: 44px; font-size: 13px; color: #F2F2EE">04 отчёт</span>
+      </div>
+      <div class="m fin" style="position: absolute; left: 0; right: 0; bottom: 60px; display: flex; justify-content: center; font-size: 13px; color: #8C8E94">данные прошли цикл и проверены</div>
+    </div>
+
+    <div style="padding: 64px; display: flex; flex-direction: column; justify-content: space-between">
+      <div style="display: flex; align-items: center; gap: 24px">
+        <div style="width: 112px; height: 112px; border-radius: 28px; background: #0E0F12; display: flex; align-items: center; justify-content: center; flex-shrink: 0">
+          <svg viewBox="0 0 120 120" aria-hidden="true" style="width: 80px; height: 80px; margin: 8px 0 0 9px"><circle cx="54" cy="54" r="30" fill="none" stroke="#F2F2EE" stroke-width="14"></circle><path d="M84 56 V104" stroke="#F2F2EE" stroke-width="14" stroke-linecap="round"></path><circle cx="54" cy="54" r="12" fill="#C9EC5F"></circle></svg>
+        </div>
+        <span style="font-size: 104px; font-weight: 600; letter-spacing: -0.05em; line-height: 1">autodq</span>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 22px">
+        <p style="margin: 0; font-size: 21px; line-height: 1.5; font-weight: 500">«auto» — это цикл из четырёх шагов: профиль, правила, проверка, отчёт. Точка данных проходит круг, кольцо замыкается, точка встаёт в центр, у кольца появляется хвост — буква q.</p>
+        <p style="margin: 0; font-size: 16px; line-height: 1.6; color: #66686E">Знак всегда стоит на чёрной подложке. Лайм — только точка внутри и маленькие отметки в интерфейсе: текущий шаг, автоматически предложенное, проверено.</p>
+      </div>
+      <div class="m" style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; border-top: 1px solid #DADAD3; padding-top: 20px; font-size: 12px">
+        <div style="display: flex; flex-direction: column; gap: 8px"><i style="height: 28px; border-radius: 8px; background: #0E0F12"></i><span>Ink<br>#0E0F12</span></div>
+        <div style="display: flex; flex-direction: column; gap: 8px"><i style="height: 28px; border-radius: 8px; background: #C9EC5F"></i><span>Lime<br>#C9EC5F</span></div>
+        <div style="display: flex; flex-direction: column; gap: 8px"><i style="height: 28px; border-radius: 8px; background: #EEF5D9"></i><span>Lime tint<br>#EEF5D9</span></div>
+        <div style="display: flex; flex-direction: column; gap: 8px"><i style="height: 28px; border-radius: 8px; background: #F2F2EE; border: 1px solid #DADAD3"></i><span>Paper<br>#F2F2EE</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding: 44px 64px; display: flex; flex-direction: column; gap: 22px; border-bottom: 1px solid #DADAD3">
+    <span class="lbl">Раскадровка</span>
+    <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px">
+      <sc-for list="{{frames}}" as="f" hint-placeholder-count="4">
+        <div style="display: flex; flex-direction: column; gap: 12px">
+          <div style="height: 180px; background: #0E0F12; display: flex; align-items: center; justify-content: center">
+            <svg viewBox="0 0 120 120" aria-hidden="true" style="width: 150px; height: 150px; margin: 8px 0 0 10px; overflow: visible">
+              <circle cx="54" cy="54" r="30" fill="none" stroke="#1C1D22" stroke-width="14"></circle>
+              <g style="transform-box: view-box; transform-origin: 54px 54px; transform: rotate(-90deg)"><circle cx="54" cy="54" r="30" fill="none" stroke="#F2F2EE" stroke-width="14" stroke-linecap="round" pathLength="100" style="stroke-dasharray: 100; stroke-dashoffset: {{f.ro}}"></circle></g>
+              <path d="M84 56 V112" fill="none" stroke="#F2F2EE" stroke-width="14" stroke-linecap="round" pathLength="100" style="stroke-dasharray: 100; stroke-dashoffset: {{f.to}}"></path>
+              <g style="transform-box: view-box; transform-origin: 54px 54px; transform: rotate({{f.rot}}deg)"><circle cx="54" cy="{{f.cy}}" r="{{f.r}}" fill="#C9EC5F"></circle></g>
+            </svg>
+          </div>
+          <span class="m" style="font-size: 12px"><b>{{f.t}}</b> · {{f.l}}</span>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section style="padding: 44px 64px; display: grid; grid-template-columns: 1fr 1fr 1.4fr; gap: 40px; flex: 1">
+    <div style="display: flex; flex-direction: column; gap: 18px">
+      <span class="lbl">Иконка и фавикон</span>
+      <div style="display: flex; align-items: flex-end; gap: 20px">
+        <div class="hov" style="width: 120px; height: 120px; border-radius: 30px; background: #0E0F12; display: flex; align-items: center; justify-content: center">
+          <svg viewBox="0 0 120 120" aria-hidden="true" style="width: 86px; height: 86px; margin: 8px 0 0 10px"><circle cx="54" cy="54" r="30" fill="none" stroke="#F2F2EE" stroke-width="14"></circle><path d="M84 56 V104" stroke="#F2F2EE" stroke-width="14" stroke-linecap="round"></path><circle cx="54" cy="54" r="12" fill="#C9EC5F"></circle></svg>
+        </div>
+        <div style="width: 48px; height: 48px; border-radius: 12px; background: #0E0F12; display: flex; align-items: center; justify-content: center">
+          <svg viewBox="0 0 120 120" aria-hidden="true" style="width: 36px; height: 36px; margin: 3px 0 0 4px"><circle cx="54" cy="54" r="30" fill="none" stroke="#F2F2EE" stroke-width="16"></circle><path d="M84 56 V104" stroke="#F2F2EE" stroke-width="16" stroke-linecap="round"></path><circle cx="54" cy="54" r="12" fill="#C9EC5F"></circle></svg>
+        </div>
+        <div style="width: 22px; height: 22px; border-radius: 6px; background: #0E0F12; display: flex; align-items: center; justify-content: center">
+          <svg viewBox="0 0 120 120" aria-hidden="true" style="width: 17px; height: 17px; margin: 1px 0 0 2px"><circle cx="54" cy="54" r="30" fill="none" stroke="#F2F2EE" stroke-width="20"></circle><path d="M84 56 V104" stroke="#F2F2EE" stroke-width="20" stroke-linecap="round"></path><circle cx="54" cy="54" r="11" fill="#C9EC5F"></circle></svg>
+        </div>
+      </div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 18px">
+      <span class="lbl">Загрузка</span>
+      <button type="button" class="ld" style="align-self: flex-start; height: 52px; padding: 0 22px 0 16px; display: flex; align-items: center; gap: 12px; border: 0; border-radius: 14px; background: #0E0F12; color: #F2F2EE; font: 600 15px 'Montserrat Alternates', system-ui, sans-serif">
+        <svg viewBox="0 0 120 120" aria-hidden="true" style="width: 24px; height: 24px; overflow: visible"><circle cx="60" cy="60" r="36" fill="none" stroke="#33353B" stroke-width="18"></circle><g class="arc"><g style="transform-box: view-box; transform-origin: 60px 60px; transform: rotate(-90deg)"><circle cx="60" cy="60" r="36" fill="none" stroke="#F2F2EE" stroke-width="18" stroke-linecap="round" pathLength="100" style="stroke-dasharray: 22 78; stroke-dashoffset: 22"></circle></g><circle cx="60" cy="24" r="10" fill="#C9EC5F"></circle></g></svg>
+        Профилирование…
+      </button>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 18px">
+      <span class="lbl">Шрифты</span>
+      <div style="display: flex; flex-direction: column; gap: 12px">
+        <span style="font-size: 40px; font-weight: 600; letter-spacing: -0.04em; line-height: 1">Montserrat Alternates</span>
+        <span class="m" style="font-size: 26px; font-weight: 500; letter-spacing: -0.02em">JetBrains Mono 0.946</span>
+        <span style="font-size: 14px; line-height: 1.5; color: #66686E">Alternates — заголовки и интерфейс. Mono — данные, пороги, имена колонок, правила.</span>
+      </div>
+    </div>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1400}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      frames: [
+        { t: '0.5–1.8 s', l: 'точка ведёт линию', ro: 70, to: 100, rot: 108, cy: 24, r: 4.5 },
+        { t: '1.8–3.2 s', l: 'кольцо почти замкнуто', ro: 18, to: 100, rot: 295, cy: 24, r: 4.5 },
+        { t: '3.3–4.3 s', l: 'точка уходит в центр', ro: 0, to: 100, rot: 0, cy: 42, r: 8 },
+        { t: '3.8–4.8 s', l: 'хвост — получается q', ro: 0, to: 0, rot: 0, cy: 54, r: 12 }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

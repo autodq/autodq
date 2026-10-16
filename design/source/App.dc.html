@@ -1,0 +1,1442 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>autodq — продукт</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;family=Montserrat+Alternates:wght@600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F4F4F0}
+a{color:#0E0F12}a:hover{color:#4D6410}
+*{box-sizing:border-box}
+.m{font-family:'JetBrains Mono',ui-monospace,Menlo,monospace;font-feature-settings:'zero' 0}
+.wm{font-family:'Montserrat Alternates','Montserrat',system-ui,sans-serif;font-weight:600;letter-spacing:-0.045em}
+.lbl{font-size:12px;font-weight:500;color:#74777F}
+.t2{color:#4B4E57}.t3{color:#74777F}
+h1,h2,h3{margin:0;font-weight:600;letter-spacing:-0.02em}
+
+/* ---------- boot ---------- */
+.boot{position:fixed;inset:0;z-index:100;background:#0E0F12;color:#F4F4F0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:36px;transition:opacity .7s cubic-bezier(.65,0,.35,1),transform .7s cubic-bezier(.65,0,.35,1)}
+.boot.out{opacity:0;transform:scale(1.03);pointer-events:none}
+.bl .ring{fill:none;stroke:#F4F4F0;stroke-width:14;stroke-linecap:round;stroke-dasharray:100;animation:rDraw 1.1s cubic-bezier(.65,0,.35,1) .2s both}
+@keyframes rDraw{from{stroke-dashoffset:100}to{stroke-dashoffset:0}}
+.bl .tail{fill:none;stroke:#F4F4F0;stroke-width:14;stroke-linecap:round;stroke-dasharray:100;animation:rDraw .5s cubic-bezier(.65,0,.35,1) 1.2s both}
+.bl .orbit{transform-box:view-box;transform-origin:54px 54px;animation:orbA 1.1s cubic-bezier(.65,0,.35,1) .2s forwards,orbB 1.3s linear 1.3s infinite}
+@keyframes orbA{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+@keyframes orbB{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+.bl .core{transform-box:fill-box;transform-origin:50% 50%;animation:pop .45s cubic-bezier(.22,1,.36,1) both}
+.bootbar{width:220px;height:2px;border-radius:1px;background:#24262C;overflow:hidden}
+.bootbar b{display:block;height:100%;background:#C9EC5F;transform-origin:0 50%;animation:bootfill 2.5s cubic-bezier(.65,0,.35,1) both}
+@keyframes bootfill{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.bootline{animation:fadeUp .6s cubic-bezier(.22,1,.36,1) .5s both}
+
+/* ---------- logo in sidebar ---------- */
+.lg .ring{fill:none;stroke:#F4F4F0;stroke-width:16;stroke-linecap:round;stroke-dasharray:100;animation:rDraw 1.1s cubic-bezier(.65,0,.35,1) .3s both}
+.lg .orbit{transform-box:view-box;transform-origin:54px 54px;animation:orbA 1.1s cubic-bezier(.65,0,.35,1) .3s both}
+.lg .drop{animation:drop .45s cubic-bezier(.65,0,.35,1) 1.45s both}
+@keyframes drop{from{transform:translateY(0)}to{transform:translateY(30px)}}
+.lg .core{transform-box:fill-box;transform-origin:50% 50%;animation:grow2 .55s cubic-bezier(.22,1,.36,1) 1.5s both}
+@keyframes grow2{from{transform:scale(1)}to{transform:scale(2.67)}}
+.lg .tail{fill:none;stroke:#F4F4F0;stroke-width:16;stroke-linecap:round;stroke-dasharray:100;animation:rDraw .45s cubic-bezier(.65,0,.35,1) 1.75s both}
+
+/* ---------- shell ---------- */
+.app{font-family:'Onest',system-ui,-apple-system,'Segoe UI',sans-serif;font-size:14px;line-height:1.45;color:#0E0F12}
+.side{flex:1 1 244px;max-width:100%;background:#0E0F12;color:#F4F4F0;padding:18px 14px;display:flex;flex-direction:column;gap:24px}
+.nav{position:relative;display:flex;flex-direction:column}
+.nv{position:relative;z-index:1;display:flex;align-items:center;gap:12px;height:44px;margin-bottom:2px;padding:0 12px;border:0;border-radius:10px;background:transparent;color:#9C9FA7;font:500 14px 'Onest',system-ui,sans-serif;text-align:left;cursor:pointer;transition:color .3s}
+.nv:hover{color:#F4F4F0}
+.nv.on{color:#F4F4F0}
+.nv svg{flex-shrink:0}
+.nv .bd{margin-left:auto;min-width:22px;height:20px;padding:0 7px;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;font:500 11px 'JetBrains Mono',monospace;background:#24262C;color:#C9CBD1}
+.nv .bd.hi{background:#C9EC5F;color:#0E0F12}
+.pill{position:absolute;left:0;right:0;top:0;height:44px;border-radius:10px;background:#1C1D22;transition:transform .55s cubic-bezier(.65,0,.35,1)}
+.pill::before{content:'';position:absolute;left:-14px;top:13px;width:3px;height:18px;border-radius:2px;background:#C9EC5F}
+.grp{height:36px;display:flex;align-items:flex-end;padding:0 12px 10px;font-size:12px;font-weight:500;color:#5F626A}
+.main{flex:999 1 560px;min-width:0;position:relative;display:flex;flex-direction:column}
+.top{display:flex;flex-wrap:wrap;align-items:center;gap:12px 14px;padding:16px 32px;border-bottom:1px solid #E4E4DE;background:#F4F4F0}
+.search{flex:1 1 220px;max-width:340px;height:38px;border-radius:9px;border:1px solid #DCDCD5;background:#FFFFFF;display:flex;align-items:center;gap:10px;padding:0 12px;color:#74777F}
+.search input{flex:1;min-width:0;border:0;outline:0;background:transparent;font:400 13px 'Onest',sans-serif;color:#0E0F12}
+.kbd{font:500 11px 'JetBrains Mono',monospace;padding:1px 6px;border-radius:5px;border:1px solid #DCDCD5;color:#74777F}
+.body{padding:24px 32px 56px;display:flex;flex-direction:column;gap:16px}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:38px;padding:0 15px;border-radius:9px;border:1px solid transparent;font:500 14px 'Onest',system-ui,sans-serif;cursor:pointer;white-space:nowrap;text-decoration:none;transition:transform .3s cubic-bezier(.22,1,.36,1),background .2s,border-color .2s,color .2s}
+.btn:active{transform:scale(.98)}
+.btn.ink{background:#0E0F12;color:#F4F4F0}
+.btn.ink:hover{background:#24262C;color:#F4F4F0}
+.btn.ink i.dot{width:6px;height:6px;border-radius:50%;background:#C9EC5F}
+.btn.ghost{background:#FFFFFF;border-color:#DCDCD5;color:#0E0F12}
+.btn.ghost:hover{border-color:#9C9FA7}
+.btn.paper{background:#F4F4F0;color:#0E0F12}
+.btn.paper:hover{background:#FFFFFF}
+.btn.sm{height:30px;padding:0 11px;font-size:13px;border-radius:7px}
+.btn[disabled]{opacity:.4;cursor:not-allowed}
+
+.card{background:#FFFFFF;border:1px solid #E4E4DE;border-radius:14px}
+.ch{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 12px;padding:16px 20px 0}
+.ch h3{font-size:15px}
+.cb{padding:16px 20px 20px}
+
+.st{display:inline-flex;align-items:center;gap:7px;height:24px;padding:0 9px;border-radius:6px;font-size:12px;font-weight:500;white-space:nowrap}
+.st i{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.st.ok{background:#F1F6DF;color:#4D6410}.st.ok i{background:#8FB82A}
+.st.warn{background:#FBF1DD;color:#7A5208}.st.warn i{background:#E3A23B}
+.st.fail{background:#FBE7E2;color:#A8361E}.st.fail i{background:#E0553A}
+.st.run{background:#0E0F12;color:#F4F4F0}.st.run i{background:#C9EC5F;animation:blink 1.2s ease-in-out infinite}
+.st.idle{background:#EFEFEA;color:#4B4E57}.st.idle i{background:#9C9FA7}
+.st.sug{background:#EDEFF3;color:#3E4659}.st.sug i{background:#6B7488}
+@keyframes blink{0%,100%{opacity:.35}50%{opacity:1}}
+.tag{display:inline-flex;align-items:center;height:22px;padding:0 8px;border-radius:6px;background:#F4F4F0;border:1px solid #E4E4DE;font:500 12px 'JetBrains Mono',monospace;color:#3A3C42;white-space:nowrap}
+
+.row{transition:background .2s}
+.row:hover{background:#F9F9F6}
+.rowbtn{width:100%;border:0;background:transparent;text-align:left;cursor:pointer;font:inherit;color:inherit;padding:0}
+.tw{overflow-x:auto}
+.th{font-size:12px;font-weight:500;color:#74777F}
+.num{font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums}
+
+.seg{position:relative;display:inline-flex;padding:3px;border-radius:10px;background:#E8E8E2}
+.seg button{position:relative;z-index:1;height:32px;padding:0 12px;border:0;border-radius:8px;background:transparent;font:500 13px 'Onest',system-ui,sans-serif;color:#4B4E57;cursor:pointer;transition:color .3s;white-space:nowrap}
+.seg button.on{color:#0E0F12}
+.seg .sp{position:absolute;top:3px;left:3px;height:32px;border-radius:8px;background:#FFFFFF;box-shadow:0 1px 2px rgba(14,15,18,.07),0 3px 10px rgba(14,15,18,.05);transition:transform .5s cubic-bezier(.65,0,.35,1)}
+
+/* ---------- transitions ---------- */
+.scr{display:flex;flex-direction:column;gap:16px;animation:scrIn .55s cubic-bezier(.22,1,.36,1) both}
+@keyframes scrIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.scr > *{animation:fadeUp .65s cubic-bezier(.22,1,.36,1) both}
+.scr > *:nth-child(2){animation-delay:.04s}.scr > *:nth-child(3){animation-delay:.08s}.scr > *:nth-child(4){animation-delay:.12s}.scr > *:nth-child(5){animation-delay:.16s}.scr > *:nth-child(6){animation-delay:.2s}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.rbar{position:absolute;left:0;top:0;height:2px;width:100%;background:#C9EC5F;transform-origin:0 50%;animation:rbar .8s cubic-bezier(.65,0,.35,1) both;z-index:5;pointer-events:none}
+@keyframes rbar{0%{transform:scaleX(0);opacity:1}70%{transform:scaleX(1);opacity:1}100%{transform:scaleX(1);opacity:0}}
+@keyframes pop{from{opacity:0;transform:scale(.2)}to{opacity:1;transform:scale(1)}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.lift{transition:box-shadow .4s cubic-bezier(.22,1,.36,1),border-color .3s}
+.lift:hover{box-shadow:0 12px 32px -18px rgba(14,15,18,.22);border-color:#D6D6CF}
+
+/* skeleton */
+.sk{border-radius:8px;background:linear-gradient(90deg,#EEEEE9 0%,#F7F7F3 40%,#EEEEE9 80%);background-size:300% 100%;animation:shim 1.3s linear infinite}
+@keyframes shim{from{background-position:100% 0}to{background-position:-200% 0}}
+
+/* ---------- charts ---------- */
+.dot{border-radius:50%;animation:pop .45s cubic-bezier(.22,1,.36,1) both;transition:transform .2s}
+.dot:hover{transform:scale(1.5)}
+.cg{border-radius:50%;transition:background-color .45s ease,box-shadow .45s ease,transform .5s cubic-bezier(.22,1,.36,1)}
+.cg.d-cur{animation:none;transform:scale(1.3);background:#C9EC5F;box-shadow:0 0 0 4px rgba(201,236,95,.28)}
+.cg.d-pend{transform:scale(.8)}
+.btn.busy{pointer-events:none}
+.btn .spn{transform-box:view-box;transform-origin:60px 60px;animation:orbB 1s linear infinite}
+.d-ok{background:#0E0F12}.d-warn{background:#E3A23B}.d-fail{background:#E0553A}.d-none{background:transparent;box-shadow:inset 0 0 0 1.5px #D6D6CF}.d-prof{background:#C9EC5F;box-shadow:inset 0 0 0 1.5px #8FB82A}.d-pend{background:transparent;box-shadow:inset 0 0 0 1.5px #D6D6CF}.d-cur{background:#C9EC5F;animation:pulse 1s ease-in-out infinite}.d-soft{background:#AEB4C2}.d-sug{background:#A6CC34}.d-rej{background:#D6D6CF}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.45)}}
+.ringv .arc{animation:arcIn 1.4s cubic-bezier(.65,0,.35,1) .15s both}
+@keyframes arcIn{from{stroke-dashoffset:100}}
+.ringv .tip{transform-box:view-box;transform-origin:70px 70px;animation:tipIn 1.4s cubic-bezier(.65,0,.35,1) .15s both}
+@keyframes tipIn{from{transform:rotate(0deg)}}
+.hbar{transform-origin:left;animation:hgrow .9s cubic-bezier(.22,1,.36,1) both}
+@keyframes hgrow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.draw{stroke-dasharray:1;stroke-dashoffset:1;animation:draw 1.5s cubic-bezier(.65,0,.35,1) .15s forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.flow path{animation:fade .9s ease both}
+.flow rect{transform-box:fill-box;transform-origin:50% 0;animation:fade .6s ease both}
+.flow text{font-family:'Onest',sans-serif;font-size:17px;fill:#4B4E57}
+.flow .n{font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:600;fill:#0E0F12}
+.marker{position:absolute;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;background:#E0553A;box-shadow:0 0 0 3px #FFFFFF;animation:pop .5s cubic-bezier(.22,1,.36,1) 1.3s both}
+.tick{position:absolute;left:-2px;right:-2px;height:2px;border-radius:1px;background:#6B7488}
+
+/* column list */
+.colr{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 12px;align-items:center;padding:12px 16px;border:0;border-bottom:1px solid #EEEEE9;background:transparent;width:100%;text-align:left;cursor:pointer;font:inherit;color:inherit;position:relative;transition:background .2s}
+.colr:hover{background:#F9F9F6}
+.colr.on{background:#F4F4F0}
+.colr.on::before{content:'';position:absolute;left:0;top:10px;bottom:10px;width:3px;border-radius:2px;background:#0E0F12}
+.meter{height:4px;border-radius:2px;background:#EEEEE9;overflow:hidden}
+.meter b{display:block;height:100%;border-radius:2px;transform-origin:left;animation:hgrow .9s cubic-bezier(.22,1,.36,1) both}
+
+/* rules */
+.rule{display:grid;grid-template-columns:26px minmax(0,1fr) 150px 160px 210px;gap:16px;align-items:center;padding:13px 20px;border-top:1px solid #EEEEE9;transition:background .2s}
+.rule:hover{background:#F9F9F6}
+.conf{height:4px;border-radius:2px;background:#EEEEE9;position:relative;overflow:hidden}
+.conf b{position:absolute;left:0;top:0;bottom:0;border-radius:2px;background:#0E0F12}
+.ck{width:20px;height:20px;border-radius:6px;border:1.5px solid #C9C9C2;background:#FFFFFF;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;transition:background .2s,border-color .2s}
+.ck.on{background:#0E0F12;border-color:#0E0F12}
+.ck svg{opacity:0;transform:scale(.5);transition:opacity .2s,transform .3s cubic-bezier(.3,1.6,.5,1)}
+.ck.on svg{opacity:1;transform:scale(1)}
+
+/* overlays */
+.ovl{position:fixed;inset:0;background:rgba(14,15,18,.32);z-index:40;animation:fade .3s ease both;border:0;padding:0;cursor:pointer}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(460px,100%);background:#FFFFFF;z-index:41;box-shadow:-24px 0 60px -24px rgba(14,15,18,.3);display:flex;flex-direction:column;animation:slideIn .5s cubic-bezier(.22,1,.36,1) both;overflow-y:auto}
+@keyframes slideIn{from{transform:translateX(100%)}to{transform:none}}
+.modal{position:fixed;left:50%;top:50%;z-index:41;width:min(440px,calc(100% - 32px));transform:translate(-50%,-50%);background:#0E0F12;color:#F4F4F0;border-radius:18px;padding:28px;display:flex;flex-direction:column;gap:22px;box-shadow:0 40px 80px -30px rgba(14,15,18,.6);animation:modalIn .5s cubic-bezier(.22,1,.36,1) both}
+@keyframes modalIn{from{opacity:0;transform:translate(-50%,-46%) scale(.97)}to{opacity:1;transform:translate(-50%,-50%)}}
+.toast{position:fixed;right:24px;bottom:24px;z-index:50;display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:12px;background:#0E0F12;color:#F4F4F0;box-shadow:0 20px 40px -16px rgba(14,15,18,.5);animation:toastIn .55s cubic-bezier(.22,1,.36,1) both}
+@keyframes toastIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.prog{height:6px;border-radius:3px;background:#EEEEE9;overflow:hidden}
+.prog b{display:block;height:100%;border-radius:3px;background:#0E0F12;transition:width .35s linear}
+.spin{transform-box:view-box;transform-origin:60px 60px;animation:orbB 1.3s linear infinite}
+.logline{animation:fadeUp .4s cubic-bezier(.22,1,.36,1) both}
+.tg{position:relative;width:40px;height:24px;border-radius:12px;border:0;background:#D6D6CF;cursor:pointer;padding:0;transition:background .3s;flex-shrink:0}
+.tg::after{content:'';position:absolute;left:3px;top:3px;width:18px;height:18px;border-radius:50%;background:#FFFFFF;transition:transform .4s cubic-bezier(.3,1.4,.5,1)}
+.tg.on{background:#0E0F12}
+.tg.on::after{transform:translateX(16px);background:#C9EC5F}
+input[type=range]{width:100%;accent-color:#0E0F12}
+.doc{background:#FFFFFF;border:1px solid #E4E4DE;border-radius:6px;box-shadow:0 30px 60px -36px rgba(14,15,18,.3);padding:40px}
+.stp{display:flex;align-items:center;gap:12px;font-size:14px;color:#6E717A;transition:color .3s}
+.stp.on{color:#F4F4F0}
+.stp i{width:18px;height:18px;border-radius:50%;box-shadow:inset 0 0 0 1.5px #3A3C42;flex-shrink:0;transition:background .3s,box-shadow .3s}
+.stp.on i{background:#C9EC5F;box-shadow:none}
+.stp.cur i{box-shadow:inset 0 0 0 1.5px #C9EC5F;animation:blink 1s ease-in-out infinite}
+@media (max-width: 720px){.top{padding:14px 16px}.body{padding:16px 16px 40px}}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+</style>
+</helmet>
+<div class="app" style="min-height: 100vh; display: flex; flex-wrap: wrap; background: #F4F4F0">
+
+  <aside class="side">
+    <div style="display: flex; align-items: center; gap: 11px; padding: 4px 8px">
+      <svg class="lg" viewBox="0 0 120 120" aria-hidden="true" style="width: 28px; height: 28px; margin: 3px 0 0 2px; overflow: visible">
+        <g style="transform-box: view-box; transform-origin: 54px 54px; transform: rotate(-90deg)"><circle class="ring" cx="54" cy="54" r="30" pathLength="100"></circle></g>
+        <path class="tail" d="M84 56 V104" pathLength="100"></path>
+        <g class="orbit"><g class="drop"><circle class="core" cx="54" cy="24" r="4.5" fill="#C9EC5F"></circle></g></g>
+      </svg>
+      <span class="wm" style="font-size: 20px">autodq</span>
+    </div>
+
+    <button type="button" style="display: flex; align-items: center; gap: 10px; height: 46px; padding: 0 12px; border-radius: 10px; border: 1px solid #24262C; background: #141519; color: #F4F4F0; cursor: pointer; text-align: left; font: inherit">
+      <span class="m" style="width: 24px; height: 24px; border-radius: 6px; background: #F4F4F0; color: #0E0F12; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600">AN</span>
+      <span style="display: flex; flex-direction: column; min-width: 0"><span style="font-size: 13px; font-weight: 600">Analytics</span><span style="font-size: 12px; color: #8C8F97">Продуктивная среда</span></span>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8C8F97" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="margin-left: auto"><path d="M8 9l4-4 4 4M8 15l4 4 4-4"></path></svg>
+    </button>
+
+    <nav class="nav" aria-label="Разделы">
+      <div class="pill" style="transform: translateY({{pillY}}px)"></div>
+      <sc-for list="{{nav1}}" as="n" hint-placeholder-count="8">
+        <button type="button" class="nv {{n.cls}}" onClick="{{n.go}}">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{n.d}}"></path></svg>
+          <span>{{n.label}}</span>
+          <sc-if value="{{n.hasBadge}}" hint-placeholder-val="{{ false }}"><span class="bd {{n.bcls}}">{{n.badge}}</span></sc-if>
+        </button>
+      </sc-for>
+      <div class="grp">Администрирование</div>
+      <sc-for list="{{nav2}}" as="n" hint-placeholder-count="2">
+        <button type="button" class="nv {{n.cls}}" onClick="{{n.go}}">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{n.d}}"></path></svg>
+          <span>{{n.label}}</span>
+        </button>
+      </sc-for>
+    </nav>
+
+    <div style="margin-top: auto; display: flex; flex-direction: column; gap: 12px">
+      <button type="button" onClick="{{goLic}}" style="display: flex; flex-direction: column; gap: 10px; padding: 14px; border-radius: 12px; background: #141519; border: 1px solid #24262C; color: #F4F4F0; cursor: pointer; text-align: left; font: inherit">
+        <span style="display: flex; justify-content: space-between; align-items: center"><span style="font-size: 13px; font-weight: 600">Лицензия {{lic.plan}}</span><span class="m" style="font-size: 11px; color: {{lic.sideColor}}">{{lic.short}}</span></span>
+        <span style="height: 3px; border-radius: 2px; background: #24262C; overflow: hidden"><span style="display: block; height: 100%; width: {{lic.sidePct}}%; background: {{lic.sideBar}}"></span></span>
+        <span style="font-size: 12px; color: #8C8F97">{{lic.sideNote}}</span>
+      </button>
+      <div style="display: flex; align-items: center; gap: 10px; padding: 4px 6px">
+        <span class="m" style="width: 30px; height: 30px; border-radius: 50%; background: #24262C; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600">АС</span>
+        <span style="display: flex; flex-direction: column; min-width: 0"><span style="font-size: 13px; font-weight: 600">Алия Сейткали</span><span style="font-size: 12px; color: #8C8F97">Администратор</span></span>
+        <a href="Login.dc.html" aria-label="Выйти" style="margin-left: auto; color: #8C8F97; display: flex"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 4h4v16h-4M10 8l-4 4 4 4M6 12h10"></path></svg></a>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="top">
+      <div style="display: flex; flex-direction: column; gap: 2px; min-width: 0; margin-right: auto">
+        <span style="font-size: 12px; color: #74777F">{{crumb}}</span>
+        <h1 style="font-size: 22px">{{title}}</h1>
+      </div>
+      <label class="search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg><input type="text" placeholder="Поиск по наборам, колонкам и правилам" aria-label="Поиск"><span class="kbd">⌘K</span></label>
+      <button type="button" class="st {{lic.cls}}" onClick="{{goLic}}" style="border: 0; cursor: pointer; height: 30px"><i></i>{{lic.badge}}</button>
+      <button type="button" class="btn ink {{runBusy}}" onClick="{{startRun}}" disabled="{{runDisabled}}" style="min-width: 214px"><sc-if value="{{isRunning}}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 120 120" aria-hidden="true" style="width: 14px; height: 14px; overflow: visible"><circle cx="60" cy="60" r="40" fill="none" stroke="#3A3C42" stroke-width="20"></circle><g class="spn"><circle cx="60" cy="20" r="16" fill="#C9EC5F"></circle></g></svg></sc-if><sc-if value="{{notRunning}}" hint-placeholder-val="{{ true }}"><i class="dot"></i></sc-if><span style="font-variant-numeric: tabular-nums">{{runLabel}}</span></button>
+    </div>
+
+    <sc-if value="{{lic.banner}}" hint-placeholder-val="{{ false }}">
+      <div style="margin: 16px 32px 0; padding: 12px 16px; border-radius: 12px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; background: {{lic.bBg}}; color: {{lic.bFg}}; animation: fadeUp .5s cubic-bezier(.22,1,.36,1) both">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16h.01"></path></svg>
+        <span style="font-size: 14px; font-weight: 600">{{lic.bTitle}}</span>
+        <span style="font-size: 14px">{{lic.bText}}</span>
+        <button type="button" class="btn sm ink" onClick="{{goLic}}" style="margin-left: auto">{{lic.cta}}</button>
+      </div>
+    </sc-if>
+
+    <div class="body">
+
+      <!-- ===================== OVERVIEW ===================== -->
+      <sc-if value="{{is.dash}}" hint-placeholder-val="{{ true }}">
+        <div class="scr">
+          <div class="rbar"></div>
+          <div style="display: flex; flex-wrap: wrap; gap: 16px">
+            <div class="card" style="flex: 2 1 460px; padding: 22px; display: flex; flex-wrap: wrap; gap: 24px; align-items: center">
+              <svg class="ringv" viewBox="0 0 140 140" aria-hidden="true" style="width: 148px; height: 148px; flex-shrink: 0; overflow: visible">
+                <circle cx="70" cy="70" r="54" fill="none" stroke="#EEEEE9" stroke-width="12"></circle>
+                <g style="transform-box: view-box; transform-origin: 70px 70px; transform: rotate(-90deg)"><circle class="arc" cx="70" cy="70" r="54" fill="none" stroke="#0E0F12" stroke-width="12" stroke-linecap="round" pathLength="100" style="stroke-dasharray: 94.6 100"></circle></g>
+                <g class="tip" style="transform: rotate(340.6deg)"><circle cx="70" cy="16" r="8" fill="#C9EC5F" stroke="#0E0F12" stroke-width="3"></circle></g>
+                <text x="70" y="76" text-anchor="middle" style="font: 600 28px 'JetBrains Mono', monospace; fill: #0E0F12">94.6</text>
+                <text x="70" y="96" text-anchor="middle" style="font: 500 11px 'Onest', sans-serif; fill: #74777F">из 100</text>
+              </svg>
+              <div style="flex: 1 1 220px; display: flex; flex-direction: column; gap: 14px">
+                <div style="display: flex; flex-direction: column; gap: 4px"><span style="font-size: 15px; font-weight: 600">Индекс качества данных</span><span class="t3" style="font-size: 13px">Доля пройденных проверок с учётом критичности правил, все наборы</span></div>
+                <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; padding-top: 14px; border-top: 1px solid #EEEEE9">
+                  <div style="display: flex; flex-direction: column; gap: 2px"><span class="lbl">За 7 дней</span><span class="num" style="font-size: 16px; font-weight: 600; color: #4D6410">+1.2</span></div>
+                  <div style="display: flex; flex-direction: column; gap: 2px"><span class="lbl">Проверено строк</span><span class="num" style="font-size: 16px; font-weight: 600">78.1 млн</span></div>
+                  <div style="display: flex; flex-direction: column; gap: 2px"><span class="lbl">Соблюдение SLA</span><span class="num" style="font-size: 16px; font-weight: 600">97.8%</span></div>
+                </div>
+              </div>
+            </div>
+            <div style="flex: 3 1 520px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(230px, 100%), 1fr)); gap: 16px">
+              <sc-for list="{{kpis}}" as="k" hint-placeholder-count="4">
+                <div class="card lift" style="padding: 16px 18px; display: flex; flex-direction: column; gap: 8px">
+                  <div style="display: flex; justify-content: space-between; gap: 8px"><span class="lbl">{{k.l}}</span><span class="num" style="font-size: 12px; color: {{k.c}}">{{k.d}}</span></div>
+                  <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 14px">
+                    <span class="num" style="font-size: 28px; font-weight: 600; letter-spacing: -0.02em; line-height: 1">{{k.v}}</span>
+                    <div style="position: relative; width: 112px; height: 30px">
+                      <sc-for list="{{k.pts}}" as="p" hint-placeholder-count="14"><span class="dot {{p.c}}" style="position: absolute; left: {{p.x}}%; bottom: {{p.y}}px; width: 5px; height: 5px; animation-delay: {{p.d}}s"></span></sc-for>
+                    </div>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="ch"><h3>Состояние наборов данных · 28 дней</h3>
+              <div style="display: flex; flex-wrap: wrap; gap: 14px; font-size: 12px; color: #4B4E57">
+                <span style="display: flex; align-items: center; gap: 6px"><i class="d-ok" style="width: 9px; height: 9px; border-radius: 50%"></i>пройдено</span>
+                <span style="display: flex; align-items: center; gap: 6px"><i class="d-warn" style="width: 9px; height: 9px; border-radius: 50%"></i>предупреждения</span>
+                <span style="display: flex; align-items: center; gap: 6px"><i class="d-fail" style="width: 9px; height: 9px; border-radius: 50%"></i>нарушения</span>
+                <span style="display: flex; align-items: center; gap: 6px"><i class="d-none" style="width: 9px; height: 9px; border-radius: 50%"></i>не запускалось</span>
+                <span style="display: flex; align-items: center; gap: 6px"><i class="d-prof" style="width: 9px; height: 9px; border-radius: 50%"></i>профилирование</span>
+              </div>
+            </div>
+            <div class="cb tw">
+              <div style="min-width: 760px; display: flex; flex-direction: column; gap: 6px">
+                <sc-for list="{{heat}}" as="h" hint-placeholder-count="8">
+                  <div class="row" style="display: grid; grid-template-columns: 180px 1fr 60px; gap: 16px; align-items: center; padding: 3px 0; border-radius: 6px">
+                    <span class="m" style="font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{h.name}}</span>
+                    <div style="display: grid; grid-template-columns: repeat(28, minmax(0, 1fr)); gap: 4px; justify-items: center">
+                      <sc-for list="{{h.cells}}" as="c" hint-placeholder-count="28"><span class="dot {{c.cls}}" style="width: 12px; height: 12px; animation-delay: {{c.d}}s" title="{{c.t}}"></span></sc-for>
+                    </div>
+                    <span class="num" style="font-size: 13px; text-align: right; font-weight: 600">{{h.score}}</span>
+                  </div>
+                </sc-for>
+                <div style="display: grid; grid-template-columns: 180px 1fr 60px; gap: 16px; font-size: 11px; color: #74777F"><span></span><span class="m" style="display: flex; justify-content: space-between"><span>18.09</span><span>01.10</span><span>15.10</span></span><span class="m" style="text-align: right">индекс</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div style="display: flex; flex-wrap: wrap; gap: 16px">
+            <div class="card" style="flex: 3 1 520px">
+              <div class="ch"><h3>Результаты правил последней проверки</h3><span style="font-size: 12px; color: #74777F">одна точка — одно правило · 96 из 601</span></div>
+              <div class="cb">
+                <div style="position: relative; height: 180px; border-bottom: 1px solid #E4E4DE">
+                  <div style="position: absolute; left: 50%; top: 0; bottom: 0; border-left: 1px dashed #C9C9C2"></div>
+                  <span style="position: absolute; left: 50%; top: 0; margin-left: 6px; font-size: 11px; color: #74777F">порог 95%</span>
+                  <sc-for list="{{swarm}}" as="s" hint-placeholder-count="40"><span class="dot {{s.c}}" style="position: absolute; left: {{s.x}}%; bottom: {{s.y}}px; width: {{s.sz}}px; height: {{s.sz}}px; margin-left: -4px; animation-delay: {{s.d}}s" title="{{s.t}}"></span></sc-for>
+                </div>
+                <div class="m" style="display: flex; justify-content: space-between; padding-top: 8px; font-size: 11px; color: #74777F"><span>90%</span><span>92.5%</span><span>95%</span><span>97.5%</span><span>100% пройдено строк</span></div>
+              </div>
+            </div>
+            <div class="card" style="flex: 2 1 360px">
+              <div class="ch"><h3>Открытые инциденты</h3><button type="button" class="btn sm ghost" onClick="{{goInc}}">Все 13</button></div>
+              <div class="cb" style="display: flex; flex-direction: column; padding-top: 8px">
+                <sc-for list="{{incTop}}" as="i" hint-placeholder-count="4">
+                  <div style="display: grid; grid-template-columns: 8px 1fr auto; gap: 12px; align-items: center; padding: 12px 0; border-bottom: 1px solid #EEEEE9">
+                    <span style="width: 8px; height: 8px; border-radius: 50%; background: {{i.bar}}"></span>
+                    <div style="display: flex; flex-direction: column; gap: 2px; min-width: 0"><span style="font-size: 14px; font-weight: 500">{{i.title}}</span><span class="m t3" style="font-size: 12px">{{i.ds}} · {{i.col}}</span></div>
+                    <span style="font-size: 12px; color: #74777F">{{i.when}}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="padding: 18px 20px; display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; background: #0E0F12; color: #F4F4F0; border-color: #0E0F12">
+            <span style="width: 8px; height: 8px; border-radius: 50%; background: #C9EC5F"></span>
+            <span style="font-size: 15px; font-weight: 600">{{sugCount}} правил предложено по обновлённым профилям</span>
+            <span class="m" style="font-size: 12px; color: #8C8F97">sales.orders · crm.customers · finance.ledger</span>
+            <button type="button" class="btn paper" onClick="{{goRules}}" style="margin-left: auto">Рассмотреть</button>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ===================== DATASETS ===================== -->
+      <sc-if value="{{is.sets}}" hint-placeholder-val="{{ false }}">
+        <div class="scr">
+          <div class="rbar"></div>
+          <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center">
+            <div class="seg">
+              <div class="sp" style="width: 110px; transform: translateX(0)"></div>
+              <button type="button" class="on" style="width: 110px">Все · 8</button>
+              <button type="button" style="width: 110px">С нарушениями</button>
+              <button type="button" style="width: 110px">Новые</button>
+            </div>
+            <span style="font-size: 13px; color: #74777F; margin-left: auto">1–8 из 8</span>
+            <button type="button" class="btn ghost">Подключить источник</button>
+          </div>
+          <div class="card tw">
+            <div style="min-width: 980px">
+              <div class="th" style="display: grid; grid-template-columns: minmax(200px, 1.8fr) 120px 110px 80px 80px 150px 130px 140px; gap: 16px; padding: 14px 20px">
+                <span>Набор данных</span><span>Источник</span><span style="text-align: right">Строк</span><span style="text-align: right">Колонок</span><span style="text-align: right">Правил</span><span>Индекс · 12 проверок</span><span>Последняя проверка</span><span>Статус</span>
+              </div>
+              <sc-for list="{{sets}}" as="s" hint-placeholder-count="8">
+                <button type="button" class="rowbtn row" onClick="{{s.open}}" style="display: grid; grid-template-columns: minmax(200px, 1.8fr) 120px 110px 80px 80px 150px 130px 140px; gap: 16px; align-items: center; padding: 13px 20px; border-top: 1px solid #EEEEE9">
+                  <span style="display: flex; flex-direction: column; gap: 2px; min-width: 0"><span class="m" style="font-size: 13px; font-weight: 600">{{s.name}}</span><span style="font-size: 12px; color: #74777F">{{s.owner}}</span></span>
+                  <span><span class="tag">{{s.src}}</span></span>
+                  <span class="num" style="font-size: 13px; text-align: right">{{s.rows}}</span>
+                  <span class="num" style="font-size: 13px; text-align: right">{{s.cols}}</span>
+                  <span class="num" style="font-size: 13px; text-align: right">{{s.rules}}</span>
+                  <span style="display: flex; align-items: center; gap: 10px"><span class="num" style="font-size: 13px; font-weight: 600; width: 36px">{{s.score}}</span><span style="position: relative; width: 90px; height: 22px"><sc-for list="{{s.pts}}" as="p" hint-placeholder-count="12"><span class="dot {{p.c}}" style="position: absolute; left: {{p.x}}%; bottom: {{p.y}}px; width: 5px; height: 5px"></span></sc-for></span></span>
+                  <span style="font-size: 13px; color: #4B4E57">{{s.last}}</span>
+                  <span><span class="st {{s.st}}"><i></i>{{s.stl}}</span></span>
+                </button>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ===================== PROFILE ===================== -->
+      <sc-if value="{{is.profile}}" hint-placeholder-val="{{ false }}">
+        <div class="scr">
+          <div class="rbar"></div>
+          <div class="card" style="padding: 18px 20px; display: flex; flex-wrap: wrap; align-items: center; gap: 14px 32px">
+            <div style="display: flex; flex-direction: column; gap: 2px"><span class="lbl">Набор данных</span><span class="m" style="font-size: 16px; font-weight: 600">{{ds.name}}</span></div>
+            <div style="display: flex; flex-direction: column; gap: 2px"><span class="lbl">Строк</span><span class="num" style="font-size: 16px; font-weight: 600">{{ds.rows}}</span></div>
+            <div style="display: flex; flex-direction: column; gap: 2px"><span class="lbl">Колонок</span><span class="num" style="font-size: 16px; font-weight: 600">{{ds.cols}}</span></div>
+            <div style="display: flex; flex-direction: column; gap: 2px"><span class="lbl">Профиль построен</span><span class="num" style="font-size: 16px; font-weight: 600">15.10.2026 09:12</span></div>
+            <div style="display: flex; flex-direction: column; gap: 2px"><span class="lbl">Выборка</span><span class="num" style="font-size: 16px; font-weight: 600">100%</span></div>
+            <div style="margin-left: auto; display: flex; gap: 8px; flex-wrap: wrap">
+              <button type="button" class="btn ghost" onClick="{{goSets}}">Назад к наборам</button>
+              <button type="button" class="btn ink" onClick="{{startGen}}" disabled="{{genDisabled}}"><i class="dot"></i>Сгенерировать правила</button>
+            </div>
+          </div>
+
+          <sc-if value="{{loading}}" hint-placeholder-val="{{ false }}">
+            <div style="display: flex; flex-wrap: wrap; gap: 16px">
+              <div class="card" style="flex: 1 1 320px; padding: 16px; display: flex; flex-direction: column; gap: 12px">
+                <div class="sk" style="height: 18px; width: 40%"></div>
+                <div class="sk" style="height: 46px"></div><div class="sk" style="height: 46px"></div><div class="sk" style="height: 46px"></div><div class="sk" style="height: 46px"></div><div class="sk" style="height: 46px"></div><div class="sk" style="height: 46px"></div>
+              </div>
+              <div class="card" style="flex: 2 1 560px; padding: 20px; display: flex; flex-direction: column; gap: 16px">
+                <div style="display: flex; align-items: center; gap: 12px">
+                  <svg viewBox="0 0 120 120" aria-hidden="true" style="width: 20px; height: 20px; overflow: visible"><circle cx="60" cy="60" r="36" fill="none" stroke="#EEEEE9" stroke-width="18"></circle><g class="spin"><g style="transform-box: view-box; transform-origin: 60px 60px; transform: rotate(-90deg)"><circle cx="60" cy="60" r="36" fill="none" stroke="#0E0F12" stroke-width="18" stroke-linecap="round" pathLength="100" style="stroke-dasharray: 22 78; stroke-dashoffset: 22"></circle></g><circle cx="60" cy="24" r="11" fill="#C9EC5F"></circle></g></svg>
+                  <span style="font-size: 14px; font-weight: 500">Загрузка профиля · 24 колонки, 4.8 млн строк</span>
+                </div>
+                <div class="sk" style="height: 180px"></div>
+                <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px"><div class="sk" style="height: 48px"></div><div class="sk" style="height: 48px"></div><div class="sk" style="height: 48px"></div><div class="sk" style="height: 48px"></div></div>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{loaded}}" hint-placeholder-val="{{ true }}">
+            <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start">
+              <div class="card" style="flex: 1 1 320px; overflow: hidden">
+                <div class="th" style="display: flex; justify-content: space-between; padding: 14px 16px; border-bottom: 1px solid #EEEEE9"><span>Колонка</span><span>Пропуски · уникальность</span></div>
+                <sc-for list="{{cols}}" as="c" hint-placeholder-count="8">
+                  <button type="button" class="colr {{c.on}}" onClick="{{c.pick}}">
+                    <span style="display: flex; align-items: center; gap: 8px; min-width: 0"><span class="m" style="font-size: 13px; font-weight: 600">{{c.name}}</span><span class="tag">{{c.type}}</span><sc-if value="{{c.hasFlag}}" hint-placeholder-val="{{ false }}"><span style="width: 7px; height: 7px; border-radius: 50%; background: {{c.flagC}}"></span></sc-if></span>
+                    <span class="num" style="font-size: 12px; color: #4B4E57">{{c.nulls}} · {{c.uniq}}%</span>
+                    <span class="meter" style="grid-column: 1 / -1"><b style="width: {{c.uniq}}%; background: #0E0F12"></b></span>
+                  </button>
+                </sc-for>
+              </div>
+
+              <div style="flex: 2 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+                <div class="card">
+                  <div class="ch"><h3><span class="m">{{col.name}}</span> · распределение значений</h3>
+                    <div style="display: flex; flex-wrap: wrap; gap: 14px; font-size: 12px; color: #4B4E57">
+                      <span style="display: flex; align-items: center; gap: 6px"><i class="d-ok" style="width: 8px; height: 8px; border-radius: 50%"></i>текущие данные</span>
+                      <span style="display: flex; align-items: center; gap: 6px"><i style="width: 12px; height: 2px; background: #6B7488"></i>профиль</span>
+                      <span style="display: flex; align-items: center; gap: 6px"><i class="d-fail" style="width: 8px; height: 8px; border-radius: 50%"></i>вне диапазона</span>
+                    </div>
+                  </div>
+                  <div class="cb">
+                    <div style="position: relative; height: 200px; display: flex; align-items: flex-end; gap: 3px; padding-top: 22px; border-bottom: 1px solid #E4E4DE">
+                      <div style="position: absolute; top: 0; bottom: 0; left: {{col.bandL}}%; width: {{col.bandW}}%; background: #F6F8EE; border-left: 1px dashed #A6CC34; border-right: 1px dashed #A6CC34"></div>
+                      <span style="position: absolute; top: 3px; left: {{col.bandL}}%; margin-left: 8px; font-size: 11px; color: #4D6410">ожидаемый диапазон · {{col.bandTxt}}</span>
+                      <sc-for list="{{col.bins}}" as="b" hint-placeholder-count="32">
+                        <div style="position: relative; flex: 1; display: flex; flex-direction: column-reverse; align-items: center; gap: 3px; padding-bottom: 3px">
+                          <sc-for list="{{b.dots}}" as="d" hint-placeholder-count="4"><span class="dot {{d.c}}" style="width: 8px; height: 8px; animation-delay: {{d.dl}}s"></span></sc-for>
+                          <span class="tick" style="bottom: {{b.tk}}px; opacity: {{b.to}}"></span>
+                        </div>
+                      </sc-for>
+                    </div>
+                    <div class="m" style="display: flex; justify-content: space-between; padding-top: 8px; font-size: 11px; color: #74777F"><span>{{col.min}}</span><span>{{col.mid}}</span><span>{{col.max}}</span></div>
+                  </div>
+                </div>
+                <div class="card">
+                  <div class="cb" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(150px, 100%), 1fr)); gap: 14px 20px">
+                    <sc-for list="{{col.stats}}" as="t" hint-placeholder-count="8">
+                      <div style="display: flex; flex-direction: column; gap: 3px"><span class="lbl">{{t.k}}</span><span class="num" style="font-size: 15px; font-weight: 600">{{t.v}}</span></div>
+                    </sc-for>
+                  </div>
+                </div>
+                <div class="card">
+                  <div class="ch"><h3>Правила, предложенные по колонке</h3><button type="button" class="btn sm ghost" onClick="{{goRules}}">Все правила</button></div>
+                  <div class="cb" style="display: flex; flex-direction: column; padding-top: 6px">
+                    <sc-for list="{{col.rules}}" as="r" hint-placeholder-count="2">
+                      <div style="display: grid; grid-template-columns: minmax(0, 1fr) 90px auto; gap: 16px; align-items: center; padding: 11px 0; border-bottom: 1px solid #EEEEE9">
+                        <span style="display: flex; flex-direction: column; gap: 2px; min-width: 0"><span class="m" style="font-size: 13px; font-weight: 600">{{r.e}}</span><span style="font-size: 12px; color: #74777F">{{r.w}}</span></span>
+                        <span class="num" style="font-size: 13px">{{r.c}}</span>
+                        <span class="st {{r.s}}"><i></i>{{r.sl}}</span>
+                      </div>
+                    </sc-for>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+
+      <!-- ===================== RULES ===================== -->
+      <sc-if value="{{is.rules}}" hint-placeholder-val="{{ false }}">
+        <div class="scr">
+          <div class="rbar"></div>
+          <div style="display: flex; flex-wrap: wrap; gap: 16px">
+            <div class="card" style="flex: 3 1 600px; min-width: 0">
+              <div class="ch"><h3>Путь правил: от профиля до результата</h3><span style="font-size: 12px; color: #74777F">все наборы · 30 дней</span></div>
+              <div class="cb">
+                <svg class="flow" viewBox="0 0 900 250" aria-hidden="true" style="width: 100%; height: auto; display: block; overflow: visible">
+                  <path d="{{fl.b1}}" fill="#0E0F12" fill-opacity=".08"></path>
+                  <path d="{{fl.b2}}" fill="#AEB4C2" fill-opacity=".25"></path>
+                  <path d="{{fl.b3}}" fill="#0E0F12" fill-opacity=".08" style="animation-delay: .15s"></path>
+                  <path d="{{fl.b4}}" fill="#A6CC34" fill-opacity=".35" style="animation-delay: .15s"></path>
+                  <path d="{{fl.b5}}" fill="#AEB4C2" fill-opacity=".25" style="animation-delay: .15s"></path>
+                  <path d="{{fl.b6}}" fill="#0E0F12" fill-opacity=".08" style="animation-delay: .3s"></path>
+                  <path d="{{fl.b7}}" fill="#E0553A" fill-opacity=".3" style="animation-delay: .3s"></path>
+                  <rect x="{{fl.n0.x}}" y="{{fl.n0.y}}" width="12" height="{{fl.n0.h}}" rx="3" fill="#6B7488"></rect>
+                  <rect x="{{fl.n1a.x}}" y="{{fl.n1a.y}}" width="12" height="{{fl.n1a.h}}" rx="3" fill="#0E0F12"></rect>
+                  <rect x="{{fl.n1b.x}}" y="{{fl.n1b.y}}" width="12" height="{{fl.n1b.h}}" rx="3" fill="#AEB4C2"></rect>
+                  <rect x="{{fl.n2a.x}}" y="{{fl.n2a.y}}" width="12" height="{{fl.n2a.h}}" rx="3" fill="#0E0F12"></rect>
+                  <rect x="{{fl.n2b.x}}" y="{{fl.n2b.y}}" width="12" height="{{fl.n2b.h}}" rx="3" fill="#A6CC34"></rect>
+                  <rect x="{{fl.n2c.x}}" y="{{fl.n2c.y}}" width="12" height="{{fl.n2c.h}}" rx="3" fill="#AEB4C2"></rect>
+                  <rect x="{{fl.n3a.x}}" y="{{fl.n3a.y}}" width="12" height="{{fl.n3a.h}}" rx="3" fill="#0E0F12"></rect>
+                  <rect x="{{fl.n3b.x}}" y="{{fl.n3b.y}}" width="12" height="{{fl.n3b.h}}" rx="3" fill="#E0553A"></rect>
+                  <text x="{{fl.n0.lx}}" y="{{fl.n0.ly}}"><tspan class="n">212</tspan><tspan dx="8">колонок</tspan></text>
+                  <text x="{{fl.n1a.lx}}" y="{{fl.n1a.ly}}"><tspan class="n">148</tspan><tspan dx="8">предложено</tspan></text>
+                  <text x="{{fl.n1b.lx}}" y="{{fl.n1b.ly}}"><tspan class="n">64</tspan><tspan dx="8">без правил</tspan></text>
+                  <text x="{{fl.n2a.lx}}" y="{{fl.n2a.ly}}"><tspan class="n">112</tspan><tspan dx="8">принято</tspan></text>
+                  <text x="{{fl.n2b.lx}}" y="{{fl.n2b.ly}}"><tspan class="n">15</tspan><tspan dx="8">на рассмотрении</tspan></text>
+                  <text x="{{fl.n2c.lx}}" y="{{fl.n2c.ly}}"><tspan class="n">21</tspan><tspan dx="8">отклонено</tspan></text>
+                  <text x="{{fl.n3a.lx}}" y="{{fl.n3a.ly}}"><tspan class="n">104</tspan><tspan dx="8">без нарушений</tspan></text>
+                  <text x="{{fl.n3b.lx}}" y="{{fl.n3b.ly}}"><tspan class="n">8</tspan><tspan dx="8">с нарушениями</tspan></text>
+                </svg>
+              </div>
+            </div>
+            <div class="card" style="flex: 2 1 380px; min-width: 0">
+              <div class="ch"><h3>Уверенность предложенных правил</h3><span style="font-size: 12px; color: #74777F">148 правил</span></div>
+              <div class="cb">
+                <div style="position: relative; height: 170px; border-bottom: 1px solid #E4E4DE">
+                  <div style="position: absolute; left: 60%; top: 0; bottom: 0; border-left: 1px dashed #C9C9C2"></div>
+                  <span style="position: absolute; left: 60%; top: 0; margin-left: 6px; font-size: 11px; color: #74777F">автопринятие ≥ 0.90</span>
+                  <sc-for list="{{confSwarm}}" as="s" hint-placeholder-count="40"><span class="dot {{s.c}}" style="position: absolute; left: {{s.x}}%; bottom: {{s.y}}px; width: 7px; height: 7px; margin-left: -3.5px; animation-delay: {{s.d}}s"></span></sc-for>
+                </div>
+                <div class="m" style="display: flex; justify-content: space-between; padding-top: 8px; font-size: 11px; color: #74777F"><span>0.75</span><span>0.80</span><span>0.85</span><span>0.90</span><span>0.95</span><span>1.00</span></div>
+                <div style="display: flex; flex-wrap: wrap; gap: 14px; padding-top: 12px; font-size: 12px; color: #4B4E57">
+                  <span style="display: flex; align-items: center; gap: 6px"><i class="d-ok" style="width: 8px; height: 8px; border-radius: 50%"></i>принято</span>
+                  <span style="display: flex; align-items: center; gap: 6px"><i class="d-sug" style="width: 8px; height: 8px; border-radius: 50%"></i>на рассмотрении</span>
+                  <span style="display: flex; align-items: center; gap: 6px"><i class="d-rej" style="width: 8px; height: 8px; border-radius: 50%"></i>отклонено</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="cb" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(min(240px, 100%), 1fr)); gap: 16px 28px">
+              <sc-for list="{{dimStats}}" as="d" hint-placeholder-count="8">
+                <div style="display: flex; flex-direction: column; gap: 7px">
+                  <div style="display: flex; justify-content: space-between; gap: 8px"><span style="font-size: 13px">{{d.name}}</span><span class="num" style="font-size: 13px; font-weight: 600">{{d.total}}</span></div>
+                  <div style="display: flex; height: 6px; gap: 2px; border-radius: 3px; overflow: hidden; background: #EEEEE9">
+                    <span class="hbar" style="width: {{d.aw}}%; background: #0E0F12"></span><span class="hbar" style="width: {{d.sw}}%; background: #A6CC34; animation-delay: .2s"></span>
+                  </div>
+                  <span style="font-size: 12px; color: #74777F">{{d.a}} активно · {{d.s}} на рассмотрении</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center">
+            <div class="seg">
+              <div class="sp" style="width: 168px; transform: translateX({{rtabX}})"></div>
+              <sc-for list="{{rtabs}}" as="t" hint-placeholder-count="3"><button type="button" class="{{t.cls}}" onClick="{{t.go}}" style="width: 168px">{{t.label}}</button></sc-for>
+            </div>
+            <span style="font-size: 13px; color: #74777F; margin-left: auto">sales.orders</span>
+            <button type="button" class="btn ink" onClick="{{acceptAll}}">Принять с уверенностью ≥ 0.90</button>
+          </div>
+          <div class="card tw">
+            <div style="min-width: 1000px">
+              <div class="th rule" style="border-top: 0; padding-top: 14px; padding-bottom: 10px"><span></span><span>Правило</span><span>Измерение</span><span>Уверенность</span><span style="text-align: right">Действие</span></div>
+              <sc-for list="{{rulesView}}" as="r" hint-placeholder-count="6">
+                <div class="rule">
+                  <button type="button" class="ck {{r.ckOn}}" onClick="{{r.toggle}}" aria-label="Отметить правило"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#C9EC5F" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg></button>
+                  <button type="button" class="rowbtn" onClick="{{r.open}}" style="display: flex; flex-direction: column; gap: 3px; min-width: 0">
+                    <span class="m" style="font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{r.expr}}</span>
+                    <span style="font-size: 12px; color: #74777F; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{r.why}}</span>
+                  </button>
+                  <span><span class="tag" style="font-family: 'Onest', sans-serif">{{r.dim}}</span></span>
+                  <span style="display: grid; grid-template-columns: 1fr 38px; gap: 10px; align-items: center"><span class="conf"><b class="hbar" style="width: {{r.confW}}%"></b></span><span class="num" style="font-size: 13px; font-weight: 600">{{r.conf}}</span></span>
+                  <span style="display: flex; gap: 8px; justify-content: flex-end">
+                    <sc-if value="{{r.isSug}}" hint-placeholder-val="{{ true }}"><span style="display: flex; gap: 8px"><button type="button" class="btn sm ghost" onClick="{{r.reject}}">Отклонить</button><button type="button" class="btn sm ink" onClick="{{r.accept}}">Принять</button></span></sc-if>
+                    <sc-if value="{{r.isAct}}" hint-placeholder-val="{{ false }}"><span style="display: flex; gap: 8px; align-items: center"><span class="st ok"><i></i>Активно</span><button type="button" class="btn sm ghost" onClick="{{r.open}}">Изменить</button></span></sc-if>
+                    <sc-if value="{{r.isRej}}" hint-placeholder-val="{{ false }}"><button type="button" class="btn sm ghost" onClick="{{r.accept}}">Восстановить</button></sc-if>
+                  </span>
+                </div>
+              </sc-for>
+              <sc-if value="{{rulesEmpty}}" hint-placeholder-val="{{ false }}">
+                <div style="padding: 40px 20px; text-align: center; border-top: 1px solid #EEEEE9; font-size: 14px; color: #74777F">Нет правил в этом статусе.</div>
+              </sc-if>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ===================== CHECKS ===================== -->
+      <sc-if value="{{is.checks}}" hint-placeholder-val="{{ false }}">
+        <div class="scr">
+          <div class="rbar"></div>
+          <div class="card">
+            <div class="ch">
+              <div style="display: flex; flex-direction: column; gap: 2px"><span class="lbl">Проверка № 2815</span><h3 style="font-size: 17px">sales.orders · 184 правила</h3></div>
+              <div style="display: flex; gap: 10px; align-items: center"><span class="st {{run.cls}}"><i></i>{{run.label}}</span><button type="button" class="btn ink {{runBusy}}" onClick="{{startRun}}" disabled="{{runDisabled}}" style="min-width: 214px"><sc-if value="{{isRunning}}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 120 120" aria-hidden="true" style="width: 14px; height: 14px; overflow: visible"><circle cx="60" cy="60" r="40" fill="none" stroke="#3A3C42" stroke-width="20"></circle><g class="spn"><circle cx="60" cy="20" r="16" fill="#C9EC5F"></circle></g></svg></sc-if><sc-if value="{{notRunning}}" hint-placeholder-val="{{ true }}"><i class="dot"></i></sc-if><span style="font-variant-numeric: tabular-nums">{{runLabel}}</span></button></div>
+            </div>
+            <div class="cb" style="display: flex; flex-wrap: wrap; gap: 24px">
+              <div style="flex: 3 1 460px; display: flex; flex-direction: column; gap: 16px">
+                <div style="display: grid; grid-template-columns: 1fr 56px; gap: 14px; align-items: center"><div class="prog"><b style="width: {{run.p}}%"></b></div><span class="num" style="font-size: 14px; font-weight: 600; text-align: right">{{run.p}}%</span></div>
+                <div style="display: grid; grid-template-columns: repeat(23, minmax(0, 1fr)); gap: 7px; justify-items: center">
+                  <sc-for list="{{run.grid}}" as="g" hint-placeholder-count="184"><span class="cg {{g.c}}" style="display: block; width: 11px; height: 11px"></span></sc-for>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px">
+                  <div style="padding: 12px 14px; border-radius: 10px; background: #F9F9F6; display: flex; flex-direction: column; gap: 4px"><span class="lbl">Выполнено</span><span class="num" style="font-size: 20px; font-weight: 600">{{run.done}}</span></div>
+                  <div style="padding: 12px 14px; border-radius: 10px; background: #F9F9F6; display: flex; flex-direction: column; gap: 4px"><span class="lbl">Без нарушений</span><span class="num" style="font-size: 20px; font-weight: 600">{{run.pass}}</span></div>
+                  <div style="padding: 12px 14px; border-radius: 10px; background: #FBF1DD; display: flex; flex-direction: column; gap: 4px"><span class="lbl" style="color: #7A5208">Предупреждения</span><span class="num" style="font-size: 20px; font-weight: 600">{{run.warn}}</span></div>
+                  <div style="padding: 12px 14px; border-radius: 10px; background: #FBE7E2; display: flex; flex-direction: column; gap: 4px"><span class="lbl" style="color: #A8361E">Нарушения</span><span class="num" style="font-size: 20px; font-weight: 600">{{run.fail}}</span></div>
+                </div>
+              </div>
+              <div class="m" style="flex: 2 1 320px; display: flex; flex-direction: column; gap: 5px; padding: 14px 16px; border-radius: 10px; background: #0E0F12; color: #C9CBD1; font-size: 12px; min-height: 240px">
+                <span style="font-family: 'Onest', sans-serif; font-size: 12px; color: #6E717A; padding-bottom: 6px">Журнал выполнения</span>
+                <sc-for list="{{run.log}}" as="l" hint-placeholder-count="5"><div class="logline"><span style="color: #5F626A">{{l.t}}</span>  <span style="color: {{l.c}}">{{l.s}}</span></div></sc-for>
+              </div>
+            </div>
+          </div>
+          <div class="card tw">
+            <div class="ch"><h3>История проверок</h3><span style="font-size: 12px; color: #74777F">последние 7 из 2 815</span></div>
+            <div style="min-width: 900px; padding-top: 8px">
+              <div class="th" style="display: grid; grid-template-columns: 90px minmax(180px, 1.5fr) 1fr 110px 120px 140px; gap: 16px; padding: 10px 20px"><span>№</span><span>Набор данных</span><span>Результат правил</span><span>Длительность</span><span>Инициатор</span><span>Статус</span></div>
+              <sc-for list="{{runs}}" as="r" hint-placeholder-count="7">
+                <div class="row" style="display: grid; grid-template-columns: 90px minmax(180px, 1.5fr) 1fr 110px 120px 140px; gap: 16px; align-items: center; padding: 12px 20px; border-top: 1px solid #EEEEE9">
+                  <span class="num" style="font-size: 13px">{{r.id}}</span>
+                  <span style="display: flex; flex-direction: column; gap: 2px"><span class="m" style="font-size: 13px">{{r.ds}}</span><span style="font-size: 12px; color: #74777F">{{r.when}}</span></span>
+                  <span style="display: flex; height: 6px; border-radius: 3px; overflow: hidden; gap: 2px"><span class="hbar" style="flex: {{r.p}}; background: #0E0F12"></span><span class="hbar" style="flex: {{r.w}}; background: #E3A23B"></span><span class="hbar" style="flex: {{r.f}}; background: #E0553A"></span></span>
+                  <span class="num" style="font-size: 13px">{{r.dur}}</span>
+                  <span style="font-size: 13px; color: #4B4E57">{{r.trig}}</span>
+                  <span><span class="st {{r.st}}"><i></i>{{r.stl}}</span></span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ===================== SCHEDULE ===================== -->
+      <sc-if value="{{is.sched}}" hint-placeholder-val="{{ false }}">
+        <div class="scr">
+          <div class="rbar"></div>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr)); gap: 16px">
+            <div class="card" style="padding: 16px 18px; display: flex; flex-direction: column; gap: 6px"><span class="lbl">Регламентных заданий</span><span class="num" style="font-size: 26px; font-weight: 600">14</span></div>
+            <div class="card" style="padding: 16px 18px; display: flex; flex-direction: column; gap: 6px"><span class="lbl">Выполнено сегодня</span><span class="num" style="font-size: 26px; font-weight: 600">9 / 14</span></div>
+            <div class="card" style="padding: 16px 18px; display: flex; flex-direction: column; gap: 6px"><span class="lbl">Соблюдение SLA · 30 дней</span><span class="num" style="font-size: 26px; font-weight: 600">97.8%</span></div>
+            <div class="card" style="padding: 16px 18px; display: flex; flex-direction: column; gap: 6px"><span class="lbl">Следующее задание</span><span class="num" style="font-size: 26px; font-weight: 600">10:00</span></div>
+          </div>
+          <div class="card">
+            <div class="ch"><h3>План на 15 октября</h3>
+              <div style="display: flex; flex-wrap: wrap; gap: 14px; font-size: 12px; color: #4B4E57">
+                <span style="display: flex; align-items: center; gap: 6px"><i class="d-ok" style="width: 9px; height: 9px; border-radius: 50%"></i>выполнено</span>
+                <span style="display: flex; align-items: center; gap: 6px"><i class="d-fail" style="width: 9px; height: 9px; border-radius: 50%"></i>с нарушениями</span>
+                <span style="display: flex; align-items: center; gap: 6px"><i class="d-pend" style="width: 9px; height: 9px; border-radius: 50%"></i>запланировано</span>
+              </div>
+            </div>
+            <div class="cb tw">
+              <div style="min-width: 760px; position: relative">
+                <div style="position: absolute; left: calc(180px + 16px + (100% - 196px) * 0.404); top: 0; bottom: 22px; border-left: 1.5px solid #C9EC5F; z-index: 1"></div>
+                <span class="m" style="position: absolute; left: calc(180px + 22px + (100% - 196px) * 0.404); top: -2px; font-size: 11px; color: #4D6410">09:41</span>
+                <div style="display: flex; flex-direction: column; gap: 4px; padding-top: 16px">
+                  <sc-for list="{{plan}}" as="r" hint-placeholder-count="6">
+                    <div class="row" style="display: grid; grid-template-columns: 180px 1fr; gap: 16px; align-items: center; height: 34px; border-radius: 6px">
+                      <span class="m" style="font-size: 12px">{{r.name}}</span>
+                      <div style="position: relative; height: 34px; background-image: repeating-linear-gradient(90deg, #EEEEE9 0 1px, transparent 1px calc(100% / 24))">
+                        <sc-for list="{{r.pts}}" as="p" hint-placeholder-count="3"><span class="dot {{p.c}}" style="position: absolute; left: {{p.x}}%; top: 11px; width: 12px; height: 12px; margin-left: -6px; animation-delay: {{p.d}}s" title="{{p.t}}"></span></sc-for>
+                      </div>
+                    </div>
+                  </sc-for>
+                </div>
+                <div class="m" style="display: grid; grid-template-columns: 180px 1fr; gap: 16px; padding-top: 6px; font-size: 11px; color: #74777F"><span></span><span style="display: flex; justify-content: space-between"><span>00:00</span><span>06:00</span><span>12:00</span><span>18:00</span><span>24:00</span></span></div>
+              </div>
+            </div>
+          </div>
+          <div class="card tw">
+            <div style="min-width: 940px">
+              <div class="th" style="display: grid; grid-template-columns: minmax(180px, 1.4fr) 1.2fr 150px 100px 130px 150px 120px; gap: 16px; padding: 14px 20px"><span>Набор данных</span><span>Периодичность</span><span>Следующий запуск</span><span>SLA</span><span>Ответственный</span><span>Уведомления</span><span>Статус</span></div>
+              <sc-for list="{{sched}}" as="s" hint-placeholder-count="6">
+                <div class="row" style="display: grid; grid-template-columns: minmax(180px, 1.4fr) 1.2fr 150px 100px 130px 150px 120px; gap: 16px; align-items: center; padding: 12px 20px; border-top: 1px solid #EEEEE9">
+                  <span class="m" style="font-size: 13px; font-weight: 600">{{s.ds}}</span>
+                  <span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 13px">{{s.freq}}</span><span class="m" style="font-size: 11px; color: #74777F">{{s.cron}}</span></span>
+                  <span class="num" style="font-size: 13px">{{s.next}}</span>
+                  <span class="num" style="font-size: 13px">{{s.sla}}</span>
+                  <span style="font-size: 13px; color: #4B4E57">{{s.owner}}</span>
+                  <span style="font-size: 13px; color: #4B4E57">{{s.notify}}</span>
+                  <span><span class="st {{s.st}}"><i></i>{{s.stl}}</span></span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ===================== AUDIT ===================== -->
+      <sc-if value="{{is.audit}}" hint-placeholder-val="{{ false }}">
+        <div class="scr">
+          <div class="rbar"></div>
+          <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center">
+            <div class="seg">
+              <div class="sp" style="width: 86px; transform: translateX({{perX}})"></div>
+              <sc-for list="{{periods}}" as="t" hint-placeholder-count="3"><button type="button" class="{{t.cls}}" onClick="{{t.go}}" style="width: 86px">{{t.label}}</button></sc-for>
+            </div>
+            <span style="font-size: 13px; color: #74777F; margin-left: auto">Все наборы · 601 активное правило</span>
+            <button type="button" class="btn ghost" onClick="{{goReports}}">Сформировать отчёт</button>
+          </div>
+
+          <div class="card">
+            <div class="ch"><h3>Индекс качества во времени</h3>
+              <div style="display: flex; flex-wrap: wrap; gap: 14px; font-size: 12px; color: #4B4E57">
+                <span style="display: flex; align-items: center; gap: 6px"><i style="width: 16px; height: 2px; background: #0E0F12"></i>медиана по наборам</span>
+                <span style="display: flex; align-items: center; gap: 6px"><i style="width: 14px; height: 10px; border-radius: 3px; background: #E7E9EE"></i>диапазон min–max</span>
+                <span style="display: flex; align-items: center; gap: 6px"><i style="width: 9px; height: 9px; border-radius: 50%; background: #E0553A"></i>набор ниже 80</span>
+              </div>
+            </div>
+            <div class="cb">
+              <div style="position: relative; height: 240px">
+                <svg viewBox="0 0 900 220" preserveAspectRatio="none" aria-hidden="true" style="position: absolute; inset: 0; width: 100%; height: 220px">
+                  <path d="M0 22 H900 M0 77 H900 M0 132 H900 M0 187 H900" stroke="#EEEEE9" stroke-width="1"></path>
+                  <path d="{{tl.band}}" fill="#E7E9EE"></path>
+                  <path d="{{tl.med}}" fill="none" stroke="#0E0F12" stroke-width="2.2" stroke-linejoin="round" style="animation: fade 1s ease .2s both"></path>
+                </svg>
+                <sc-for list="{{tl.marks}}" as="k" hint-placeholder-count="4"><div class="marker" style="left: {{k.x}}%; top: {{k.y}}px" title="{{k.t}}"></div></sc-for>
+                <div class="m" style="position: absolute; left: 0; right: 0; bottom: 0; display: flex; justify-content: space-between; font-size: 11px; color: #74777F"><span>16.09</span><span>23.09</span><span>30.09</span><span>07.10</span><span>15.10</span></div>
+                <div class="m" style="position: absolute; right: 4px; top: 14px; display: flex; flex-direction: column; justify-content: space-between; height: 180px; font-size: 10px; color: #9C9FA7; text-align: right"><span>100</span><span>90</span><span>80</span><span>70</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(460px, 100%), 1fr)); gap: 16px">
+            <div class="card">
+              <div class="ch"><h3>Правила × проверки</h3><span style="font-size: 12px; color: #74777F">размер точки — число нарушений</span></div>
+              <div class="cb tw">
+                <div style="min-width: 520px; display: flex; flex-direction: column; gap: 8px">
+                  <sc-for list="{{matrix}}" as="r" hint-placeholder-count="10">
+                    <div style="display: grid; grid-template-columns: 160px 1fr; gap: 12px; align-items: center">
+                      <span class="m" style="font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{r.name}}</span>
+                      <div style="display: grid; grid-template-columns: repeat(24, minmax(0, 1fr)); gap: 6px; align-items: center; justify-items: center">
+                        <sc-for list="{{r.cells}}" as="c" hint-placeholder-count="24"><span class="dot" style="width: {{c.s}}px; height: {{c.s}}px; background: {{c.c}}; animation-delay: {{c.d}}s"></span></sc-for>
+                      </div>
+                    </div>
+                  </sc-for>
+                  <div class="m" style="display: grid; grid-template-columns: 160px 1fr; gap: 12px; font-size: 11px; color: #74777F"><span></span><span style="display: flex; justify-content: space-between"><span>№ 2791</span><span>№ 2814</span></span></div>
+                </div>
+              </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 16px">
+              <div class="card">
+                <div class="ch"><h3>Классы нарушений</h3><span style="font-size: 12px; color: #74777F">213 за 30 дней</span></div>
+                <div class="cb" style="display: flex; flex-direction: column; gap: 16px">
+                  <div style="display: flex; height: 28px; border-radius: 8px; overflow: hidden; gap: 2px">
+                    <sc-for list="{{classes}}" as="c" hint-placeholder-count="7"><div class="hbar" style="flex: {{c.n}}; background: {{c.bg}}; animation-delay: {{c.d}}s" title="{{c.name}}"></div></sc-for>
+                  </div>
+                  <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(min(190px, 100%), 1fr)); gap: 10px 20px">
+                    <sc-for list="{{classes}}" as="c" hint-placeholder-count="7">
+                      <div style="display: flex; align-items: center; gap: 10px"><i style="width: 10px; height: 10px; border-radius: 3px; background: {{c.bg}}; flex-shrink: 0"></i><span style="font-size: 13px">{{c.name}}</span><span class="num" style="margin-left: auto; font-size: 13px; font-weight: 600">{{c.n}}</span></div>
+                    </sc-for>
+                  </div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="ch"><h3>Измерения качества</h3><span style="font-size: 12px; color: #74777F">шкала 90–100 · цель 95</span></div>
+                <div class="cb" style="display: flex; flex-direction: column; gap: 14px">
+                  <sc-for list="{{dims}}" as="d" hint-placeholder-count="6">
+                    <div style="display: grid; grid-template-columns: 180px 1fr 48px; gap: 14px; align-items: center">
+                      <span style="font-size: 13px">{{d.name}}</span>
+                      <div style="position: relative; height: 18px">
+                        <div style="position: absolute; left: 0; right: 0; top: 8px; height: 2px; background: #EEEEE9"></div>
+                        <div class="hbar" style="position: absolute; left: 0; top: 8px; height: 2px; width: {{d.w}}%; background: #0E0F12; animation-delay: {{d.dl}}s"></div>
+                        <div style="position: absolute; left: 50%; top: 2px; width: 1.5px; height: 14px; background: #AEB4C2"></div>
+                        <div class="dot" style="position: absolute; left: {{d.w}}%; top: 2px; width: 14px; height: 14px; margin-left: -7px; background: {{d.dot}}; box-shadow: 0 0 0 2.5px #0E0F12 inset; animation-delay: {{d.dl2}}s"></div>
+                      </div>
+                      <span class="num" style="font-size: 13px; font-weight: 600; text-align: right">{{d.v}}</span>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ===================== INCIDENTS ===================== -->
+      <sc-if value="{{is.inc}}" hint-placeholder-val="{{ false }}">
+        <div class="scr">
+          <div class="rbar"></div>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr)); gap: 16px">
+            <div class="card" style="padding: 16px 18px; display: flex; flex-direction: column; gap: 6px"><span class="lbl">Открыто</span><span class="num" style="font-size: 26px; font-weight: 600">13</span></div>
+            <div class="card" style="padding: 16px 18px; display: flex; flex-direction: column; gap: 6px"><span class="lbl">Критичных</span><span class="num" style="font-size: 26px; font-weight: 600; color: #A8361E">4</span></div>
+            <div class="card" style="padding: 16px 18px; display: flex; flex-direction: column; gap: 6px"><span class="lbl">Среднее время решения</span><span class="num" style="font-size: 26px; font-weight: 600">6 ч 20 мин</span></div>
+            <div class="card" style="padding: 16px 18px; display: flex; flex-direction: column; gap: 6px"><span class="lbl">Просрочено по SLA</span><span class="num" style="font-size: 26px; font-weight: 600">1</span></div>
+          </div>
+          <div style="display: flex; flex-wrap: wrap; gap: 8px">
+            <sc-for list="{{incFilters}}" as="f" hint-placeholder-count="8">
+              <button type="button" class="btn sm {{f.cls}}" onClick="{{f.go}}">{{f.label}} <span class="num" style="opacity: .55">{{f.n}}</span></button>
+            </sc-for>
+          </div>
+          <div class="card tw">
+            <div style="min-width: 980px">
+              <div class="th" style="display: grid; grid-template-columns: 4px minmax(280px, 2fr) 150px 1fr 130px 110px 120px; gap: 16px; padding: 14px 20px"><span></span><span>Инцидент</span><span>Класс</span><span>Набор · колонка</span><span>Ответственный</span><span>SLA</span><span>Статус</span></div>
+              <sc-for list="{{incView}}" as="i" hint-placeholder-count="7">
+                <div class="row" style="display: grid; grid-template-columns: 4px minmax(280px, 2fr) 150px 1fr 130px 110px 120px; gap: 16px; align-items: center; padding: 14px 20px; border-top: 1px solid #EEEEE9">
+                  <span style="align-self: stretch; border-radius: 2px; background: {{i.bar}}"></span>
+                  <span style="display: flex; flex-direction: column; gap: 3px; min-width: 0"><span style="font-size: 14px; font-weight: 600">{{i.title}}</span><span style="font-size: 12px; color: #4B4E57; line-height: 1.45">{{i.desc}}</span></span>
+                  <span><span class="tag" style="font-family: 'Onest', sans-serif">{{i.cls}}</span></span>
+                  <span style="display: flex; flex-direction: column; gap: 2px"><span class="m" style="font-size: 12px">{{i.ds}}</span><span class="m" style="font-size: 12px; color: #74777F">{{i.col}} · {{i.cnt}}</span></span>
+                  <span style="font-size: 13px; color: #4B4E57">{{i.owner}}</span>
+                  <span class="num" style="font-size: 12px; color: {{i.slaC}}">{{i.sla}}</span>
+                  <span><span class="st {{i.stc}}"><i></i>{{i.state}}</span></span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ===================== REPORTS ===================== -->
+      <sc-if value="{{is.reports}}" hint-placeholder-val="{{ false }}">
+        <div class="scr">
+          <div class="rbar"></div>
+          <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start">
+            <div style="flex: 1 1 300px; display: flex; flex-direction: column; gap: 10px">
+              <sc-for list="{{reports}}" as="r" hint-placeholder-count="4">
+                <button type="button" class="card lift" onClick="{{r.pick}}" style="padding: 14px 16px; text-align: left; font: inherit; color: inherit; cursor: pointer; display: flex; flex-direction: column; gap: 4px; border-color: {{r.bc}}">
+                  <span style="display: flex; justify-content: space-between; gap: 10px"><span style="font-size: 14px; font-weight: 600">{{r.title}}</span><span class="num" style="font-size: 13px; font-weight: 600">{{r.score}}</span></span>
+                  <span style="font-size: 12px; color: #74777F">{{r.meta}}</span>
+                </button>
+              </sc-for>
+              <div class="card" style="padding: 14px 16px; display: flex; align-items: center; gap: 14px">
+                <span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 14px; font-weight: 600">Еженедельная рассылка</span><span style="font-size: 12px; color: #74777F">понедельник 09:00 · PDF · группа data-quality</span></span>
+                <button type="button" class="tg {{tgWeekly}}" onClick="{{toggleWeekly}}" aria-label="Еженедельная рассылка" style="margin-left: auto"></button>
+              </div>
+            </div>
+            <div style="flex: 999 1 520px; min-width: 0; display: flex; flex-direction: column; gap: 12px">
+              <div style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end">
+                <button type="button" class="btn ghost">JSON</button><button type="button" class="btn ghost">HTML</button><button type="button" class="btn ink"><i class="dot"></i>Скачать PDF</button>
+              </div>
+              <div class="doc">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; padding-bottom: 22px; border-bottom: 1px solid #EEEEE9">
+                  <div style="display: flex; flex-direction: column; gap: 4px"><span class="lbl">Отчёт о качестве данных</span><span style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em">{{rep.title}}</span><span style="font-size: 12px; color: #74777F">{{rep.meta}}</span></div>
+                  <div style="width: 42px; height: 42px; border-radius: 11px; background: #0E0F12; display: flex; align-items: center; justify-content: center; flex-shrink: 0"><svg viewBox="0 0 120 120" aria-hidden="true" style="width: 28px; height: 28px; margin: 3px 0 0 3px"><circle cx="54" cy="54" r="30" fill="none" stroke="#F4F4F0" stroke-width="16"></circle><path d="M84 56 V104" stroke="#F4F4F0" stroke-width="16" stroke-linecap="round"></path><circle cx="54" cy="54" r="12" fill="#C9EC5F"></circle></svg></div>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(110px, 100%), 1fr)); gap: 16px; padding: 22px 0; border-bottom: 1px solid #EEEEE9">
+                  <div style="display: flex; flex-direction: column; gap: 2px"><span class="lbl">Индекс</span><span class="num" style="font-size: 26px; font-weight: 600">{{rep.score}}</span></div>
+                  <div style="display: flex; flex-direction: column; gap: 2px"><span class="lbl">Правил</span><span class="num" style="font-size: 26px; font-weight: 600">184</span></div>
+                  <div style="display: flex; flex-direction: column; gap: 2px"><span class="lbl">С нарушениями</span><span class="num" style="font-size: 26px; font-weight: 600">8</span></div>
+                  <div style="display: flex; flex-direction: column; gap: 2px"><span class="lbl">Строк</span><span class="num" style="font-size: 26px; font-weight: 600">4.8 млн</span></div>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 10px; padding: 22px 0; border-bottom: 1px solid #EEEEE9">
+                  <span style="font-size: 15px; font-weight: 600">Заключение</span>
+                  <span style="font-size: 14px; line-height: 1.6; color: #3A3C42">37 значений <span class="m">amount</span> выходят за ожидаемый диапазон профиля (p99.5 = 2 450 000). Доля пропусков <span class="m">discount_pct</span> выросла с 9.8% до 12.4% при допуске 15%. Данные <span class="m">created_at</span> поступили с задержкой 26 ч при допуске 24 ч. Остальные 176 правил выполнены без нарушений.</span>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 6px; padding-top: 22px">
+                  <span style="font-size: 15px; font-weight: 600; padding-bottom: 6px">Правила с нарушениями</span>
+                  <sc-for list="{{repRules}}" as="r" hint-placeholder-count="4">
+                    <div style="display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center; padding: 9px 0; border-bottom: 1px solid #F4F4F0"><span class="m" style="font-size: 13px">{{r.e}}</span><span class="st {{r.s}}"><i></i>{{r.v}}</span></div>
+                  </sc-for>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ===================== LICENSE ===================== -->
+      <sc-if value="{{is.lic}}" hint-placeholder-val="{{ false }}">
+        <div class="scr">
+          <div class="rbar"></div>
+          <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center">
+            <span style="font-size: 13px; color: #74777F">Демонстрация состояний:</span>
+            <div class="seg">
+              <div class="sp" style="width: 116px; transform: translateX({{licX}})"></div>
+              <sc-for list="{{licTabs}}" as="t" hint-placeholder-count="4"><button type="button" class="{{t.cls}}" onClick="{{t.go}}" style="width: 116px">{{t.label}}</button></sc-for>
+            </div>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(380px, 100%), 1fr)); gap: 16px">
+            <div class="card" style="padding: 24px; display: flex; flex-direction: column; gap: 22px; background: #0E0F12; color: #F4F4F0; border-color: #0E0F12">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 16px">
+                <div style="display: flex; flex-direction: column; gap: 4px"><span style="font-size: 12px; color: #8C8F97">Тариф</span><span style="font-size: 30px; font-weight: 600; letter-spacing: -0.02em">{{lic.plan}}</span></div>
+                <span class="st {{lic.cls}}"><i></i>{{lic.badge}}</span>
+              </div>
+              <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px">
+                <div style="display: flex; flex-direction: column; gap: 3px"><span style="font-size: 12px; color: #8C8F97">{{lic.dateLabel}}</span><span class="num" style="font-size: 17px; font-weight: 600">{{lic.date}}</span></div>
+                <div style="display: flex; flex-direction: column; gap: 3px"><span style="font-size: 12px; color: #8C8F97">Лицензионный ключ</span><span class="num" style="font-size: 17px; font-weight: 600">ADQ-••••-••••-T3LP</span></div>
+                <div style="display: flex; flex-direction: column; gap: 3px"><span style="font-size: 12px; color: #8C8F97">Организация</span><span style="font-size: 15px; font-weight: 600">[Название организации]</span></div>
+                <div style="display: flex; flex-direction: column; gap: 3px"><span style="font-size: 12px; color: #8C8F97">Тип размещения</span><span style="font-size: 15px; font-weight: 600">On-premise</span></div>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 8px"><div style="height: 4px; border-radius: 2px; background: #24262C; overflow: hidden"><div class="hbar" style="height: 100%; width: {{lic.sidePct}}%; background: {{lic.sideBar}}"></div></div><span style="font-size: 12px; color: #8C8F97">{{lic.sideNote}}</span></div>
+              <div style="display: flex; gap: 8px; flex-wrap: wrap"><button type="button" class="btn paper">{{lic.cta}}</button><button type="button" class="btn" style="background: #1C1D22; color: #F4F4F0">Ввести новый ключ</button></div>
+            </div>
+            <div class="card">
+              <div class="ch"><h3>Использование лимитов</h3><span style="font-size: 12px; color: #74777F">до {{lic.date}}</span></div>
+              <div class="cb" style="display: flex; flex-direction: column; gap: 18px">
+                <sc-for list="{{usage}}" as="u" hint-placeholder-count="4">
+                  <div style="display: flex; flex-direction: column; gap: 8px">
+                    <div style="display: flex; justify-content: space-between; gap: 12px"><span style="font-size: 14px">{{u.name}}</span><span class="num" style="font-size: 13px; font-weight: 600">{{u.v}}</span></div>
+                    <div class="meter" style="height: 6px; border-radius: 3px"><b style="width: {{u.p}}%; background: {{u.c}}"></b></div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+          <div class="card tw">
+            <div style="min-width: 720px">
+              <div class="th" style="display: grid; grid-template-columns: minmax(220px, 1.6fr) repeat(3, 1fr); gap: 16px; padding: 14px 20px"><span>Возможности</span><span>Пробная</span><span>Team</span><span>Enterprise</span></div>
+              <sc-for list="{{plans}}" as="p" hint-placeholder-count="6">
+                <div class="row" style="display: grid; grid-template-columns: minmax(220px, 1.6fr) repeat(3, 1fr); gap: 16px; padding: 12px 20px; border-top: 1px solid #EEEEE9; font-size: 14px"><span>{{p.f}}</span><span style="font-size: 13px; color: #4B4E57">{{p.a}}</span><span style="font-size: 13px; font-weight: 600">{{p.b}}</span><span style="font-size: 13px; color: #4B4E57">{{p.c}}</span></div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ===================== SETTINGS ===================== -->
+      <sc-if value="{{is.settings}}" hint-placeholder-val="{{ false }}">
+        <div class="scr">
+          <div class="rbar"></div>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(440px, 100%), 1fr)); gap: 16px">
+            <div class="card">
+              <div class="ch"><h3>Источники данных</h3><button type="button" class="btn sm ink">Добавить источник</button></div>
+              <div class="cb" style="display: flex; flex-direction: column; padding-top: 8px">
+                <sc-for list="{{sources}}" as="s" hint-placeholder-count="4">
+                  <div style="display: grid; grid-template-columns: 38px 1fr auto; gap: 14px; align-items: center; padding: 11px 0; border-bottom: 1px solid #EEEEE9">
+                    <span class="m" style="width: 38px; height: 38px; border-radius: 9px; background: #F4F4F0; border: 1px solid #E4E4DE; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600">{{s.ab}}</span>
+                    <span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 14px; font-weight: 600">{{s.name}}</span><span class="m" style="font-size: 12px; color: #74777F">{{s.host}}</span></span>
+                    <span class="st {{s.st}}"><i></i>{{s.stl}}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+            <div class="card">
+              <div class="ch"><h3>Генерация правил</h3></div>
+              <div class="cb" style="display: flex; flex-direction: column; gap: 18px">
+                <div style="display: flex; flex-direction: column; gap: 8px"><div style="display: flex; justify-content: space-between"><label for="r1" style="font-size: 14px">Минимальная уверенность для предложения</label><span class="num" style="font-size: 13px; font-weight: 600">0.75</span></div><input id="r1" type="range" min="0" max="100" value="75" onChange="{{noop}}"></div>
+                <div style="display: flex; flex-direction: column; gap: 8px"><div style="display: flex; justify-content: space-between"><label for="r2" style="font-size: 14px">Границы диапазонов по квантилям</label><span class="num" style="font-size: 13px; font-weight: 600">p0.5 – p99.5</span></div><input id="r2" type="range" min="0" max="100" value="90" onChange="{{noop}}"></div>
+                <div style="display: flex; flex-direction: column; gap: 8px"><div style="display: flex; justify-content: space-between"><label for="r3" style="font-size: 14px">Порог дрейфа распределения, PSI</label><span class="num" style="font-size: 13px; font-weight: 600">0.20</span></div><input id="r3" type="range" min="0" max="100" value="40" onChange="{{noop}}"></div>
+                <div style="display: flex; align-items: center; gap: 14px"><span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 14px; font-weight: 600">Автоматически принимать при уверенности ≥ 0.98</span><span style="font-size: 13px; color: #74777F">Остальные правила требуют подтверждения</span></span><button type="button" class="tg {{tgAuto}}" onClick="{{toggleAuto}}" aria-label="Автопринятие" style="margin-left: auto"></button></div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="ch"><h3>Уведомления</h3></div>
+              <div class="cb" style="display: flex; flex-direction: column; gap: 14px">
+                <div style="display: flex; align-items: center; gap: 14px"><span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 14px; font-weight: 600">Telegram</span><span style="font-size: 12px; color: #74777F">нарушения критичных правил</span></span><button type="button" class="tg {{tgTg}}" onClick="{{toggleTg}}" aria-label="Telegram" style="margin-left: auto"></button></div>
+                <div style="display: flex; align-items: center; gap: 14px"><span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 14px; font-weight: 600">Электронная почта</span><span style="font-size: 12px; color: #74777F">ежедневная сводка в 09:00</span></span><button type="button" class="tg {{tgMail}}" onClick="{{toggleMail}}" aria-label="Почта" style="margin-left: auto"></button></div>
+                <div style="display: flex; align-items: center; gap: 14px"><span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 14px; font-weight: 600">Webhook</span><span style="font-size: 12px; color: #74777F">интеграция с Airflow и CI</span></span><button type="button" class="tg {{tgHook}}" onClick="{{toggleHook}}" aria-label="Webhook" style="margin-left: auto"></button></div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="ch"><h3>Пользователи и роли</h3><button type="button" class="btn sm ghost">Пригласить</button></div>
+              <div class="cb" style="display: flex; flex-direction: column; padding-top: 8px">
+                <sc-for list="{{team}}" as="t" hint-placeholder-count="4">
+                  <div style="display: grid; grid-template-columns: 32px 1fr auto; gap: 12px; align-items: center; padding: 10px 0; border-bottom: 1px solid #EEEEE9">
+                    <span class="m" style="width: 32px; height: 32px; border-radius: 50%; background: {{t.bg}}; color: {{t.fg}}; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600">{{t.ab}}</span>
+                    <span style="display: flex; flex-direction: column; gap: 1px"><span style="font-size: 14px; font-weight: 600">{{t.name}}</span><span style="font-size: 12px; color: #74777F">{{t.mail}}</span></span>
+                    <span class="tag" style="font-family: 'Onest', sans-serif">{{t.role}}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+          <div class="card tw">
+            <div class="ch"><h3>Журнал действий</h3><span style="font-size: 12px; color: #74777F">хранится 1 год</span></div>
+            <div style="min-width: 760px; padding: 8px 0 6px">
+              <sc-for list="{{actlog}}" as="a" hint-placeholder-count="5">
+                <div class="row" style="display: grid; grid-template-columns: 140px 160px 1fr; gap: 16px; padding: 10px 20px; border-top: 1px solid #EEEEE9; font-size: 13px"><span class="num" style="color: #74777F">{{a.t}}</span><span>{{a.u}}</span><span>{{a.a}}</span></div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+    </div>
+  </main>
+
+  <sc-if value="{{hasRule}}" hint-placeholder-val="{{ false }}">
+    <button type="button" class="ovl" onClick="{{closeRule}}" aria-label="Закрыть панель"></button>
+    <aside class="drawer" aria-label="Правило">
+      <div style="padding: 18px 22px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #EEEEE9">
+        <span class="st {{sel.stCls}}"><i></i>{{sel.stl}}</span>
+        <button type="button" class="btn sm ghost" onClick="{{closeRule}}">Закрыть</button>
+      </div>
+      <div style="padding: 22px; display: flex; flex-direction: column; gap: 20px">
+        <div style="display: flex; flex-direction: column; gap: 6px"><span class="lbl">Правило</span><span class="m" style="font-size: 16px; font-weight: 600; line-height: 1.45">{{sel.expr}}</span></div>
+        <div style="display: flex; gap: 6px; flex-wrap: wrap"><span class="tag" style="font-family: 'Onest', sans-serif">{{sel.dim}}</span><span class="tag">{{sel.col}}</span><span class="tag">уверенность {{sel.conf}}</span></div>
+        <div style="padding: 14px 16px; border-radius: 10px; background: #F9F9F6; display: flex; flex-direction: column; gap: 6px"><span class="lbl">Основание</span><span style="font-size: 14px; line-height: 1.55">{{sel.why}}</span></div>
+        <div style="display: flex; flex-direction: column; gap: 8px"><label for="thr" style="font-size: 13px; font-weight: 600">Порог</label><input id="thr" type="text" value="{{sel.thr}}" readOnly="{{ true }}" class="m" style="height: 42px; border-radius: 9px; border: 1px solid #DCDCD5; padding: 0 12px; font-size: 13px"></div>
+        <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+          <div style="padding: 12px 14px; border-radius: 10px; border: 1px solid #EEEEE9; display: flex; flex-direction: column; gap: 3px"><span class="lbl">На данных профиля</span><span class="num" style="font-size: 16px; font-weight: 600">{{sel.onProf}}</span></div>
+          <div style="padding: 12px 14px; border-radius: 10px; border: 1px solid #EEEEE9; display: flex; flex-direction: column; gap: 3px"><span class="lbl">Критичность</span><span style="font-size: 16px; font-weight: 600">{{sel.crit}}</span></div>
+        </div>
+        <div style="display: flex; gap: 8px">
+          <button type="button" class="btn ghost" onClick="{{rejectSel}}" style="flex: 1">Отклонить</button>
+          <button type="button" class="btn ink" onClick="{{acceptSel}}" style="flex: 1"><i class="dot"></i>Принять</button>
+        </div>
+      </div>
+    </aside>
+  </sc-if>
+
+  <sc-if value="{{genOn}}" hint-placeholder-val="{{ false }}">
+    <div class="ovl" style="cursor: default"></div>
+    <div class="modal" role="dialog" aria-label="Генерация правил">
+      <div style="display: flex; align-items: center; gap: 14px">
+        <svg viewBox="0 0 120 120" aria-hidden="true" style="width: 36px; height: 36px; overflow: visible"><circle cx="60" cy="60" r="36" fill="none" stroke="#24262C" stroke-width="16"></circle><g class="spin"><g style="transform-box: view-box; transform-origin: 60px 60px; transform: rotate(-90deg)"><circle cx="60" cy="60" r="36" fill="none" stroke="#F4F4F0" stroke-width="16" stroke-linecap="round" pathLength="100" style="stroke-dasharray: 22 78; stroke-dashoffset: 22"></circle></g><circle cx="60" cy="24" r="10" fill="#C9EC5F"></circle></g></svg>
+        <span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">Генерация правил</span><span class="m" style="font-size: 12px; color: #8C8F97">{{ds.name}} · 24 колонки</span></span>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 12px">
+        <sc-for list="{{genSteps}}" as="g" hint-placeholder-count="4"><div class="stp {{g.cls}}"><i></i>{{g.l}}</div></sc-for>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{toast}}" hint-placeholder-val="{{ false }}">
+    <div class="toast" role="status">
+      <span style="width: 8px; height: 8px; border-radius: 50%; background: #C9EC5F"></span>
+      <span style="display: flex; flex-direction: column; gap: 1px"><span style="font-size: 14px; font-weight: 600">Проверка № 2815 завершена</span><span style="font-size: 12px; color: #8C8F97">176 без нарушений · 6 предупреждений · 2 нарушения</span></span>
+      <button type="button" class="btn sm paper" onClick="{{goInc}}">Инциденты</button>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{bootOn}}" hint-placeholder-val="{{ false }}">
+    <div class="boot {{bootCls}}" role="status" aria-label="Загрузка">
+      <svg class="bl" viewBox="0 0 120 120" aria-hidden="true" style="width: 112px; height: 112px; overflow: visible">
+        <circle cx="54" cy="54" r="30" fill="none" stroke="#1C1D22" stroke-width="14"></circle>
+        <g style="transform-box: view-box; transform-origin: 54px 54px; transform: rotate(-90deg)"><circle class="ring" cx="54" cy="54" r="30" pathLength="100"></circle></g>
+        <path class="tail" d="M84 56 V112" pathLength="100"></path>
+        <g class="orbit"><circle class="core" cx="54" cy="24" r="5" fill="#C9EC5F"></circle></g>
+      </svg>
+      <div class="bootline" style="display: flex; flex-direction: column; align-items: center; gap: 14px">
+        <span class="wm" style="font-size: 26px">autodq</span>
+        <div class="bootbar"><b></b></div>
+        <span style="font-size: 13px; color: #8C8F97">Analytics · загрузка рабочего пространства</span>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"start":{"editor":"enum","options":["dash","sets","profile","rules","checks","sched","audit","inc","reports","lic","settings"],"default":"dash"},"license":{"editor":"enum","options":["active","trial","expiring","expired"],"default":"active"},"boot":{"editor":"boolean","default":true},"bootHold":{"editor":"boolean","default":false},"drawer":{"editor":"boolean","default":false},"running":{"editor":"boolean","default":false},"gen":{"editor":"boolean","default":false},"skeleton":{"editor":"boolean","default":false},"$preview":{"width":1440,"height":1240}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    const boot = props.boot === undefined ? true : !!props.boot;
+    this.state = {
+      screen: props.start || 'dash', ds: 0, col: 2, rtab: 'sug', per: 1, inc: 'all', rep: 0,
+      lic: props.license || 'active', sel: props.drawer ? 3 : null,
+      p: props.running ? 56 : 0, running: !!props.running, ran: !!props.running, toast: false,
+      boot: (boot || props.bootHold) ? 'on' : 'off', loading: !!props.skeleton, gen: props.gen ? 2 : -1,
+      rs: { 1: 'act', 2: 'act', 3: 'sug', 4: 'sug', 5: 'sug', 6: 'sug', 7: 'sug', 8: 'sug', 9: 'sug', 10: 'rej', 11: 'act', 12: 'sug' },
+      tg: { weekly: true, auto: false, tg: true, mail: true, hook: false }
+    };
+  }
+  componentDidMount() {
+    if (this.state.boot === 'on' && !this.props.bootHold) {
+      this.b1 = setTimeout(() => this.setState({ boot: 'out' }), 2600);
+      this.b2 = setTimeout(() => this.setState({ boot: 'off' }), 3350);
+    }
+  }
+  componentWillUnmount() { [this.timer, this.gt].forEach((t) => t && clearInterval(t)); [this.tt, this.lt, this.b1, this.b2].forEach((t) => t && clearTimeout(t)); }
+  go(s) { this.setState({ screen: s, sel: null }); }
+  openSet(i) {
+    this.setState({ screen: 'profile', ds: i, col: 2, loading: true, sel: null });
+    if (this.lt) clearTimeout(this.lt);
+    this.lt = setTimeout(() => this.setState({ loading: false }), 1100);
+  }
+  startGen() {
+    if (this.gt || this.state.lic === 'expired') return;
+    this.setState({ gen: 0 });
+    this.gt = setInterval(() => {
+      const g = this.state.gen + 1;
+      if (g > 4) { clearInterval(this.gt); this.gt = null; this.setState({ gen: -1, screen: 'rules', rtab: 'sug' }); }
+      else this.setState({ gen: g });
+    }, 650);
+  }
+  startRun() {
+    if (this.timer || this.state.lic === 'expired') return;
+    this.setState({ running: true, p: 0, ran: true, screen: 'checks', sel: null });
+    this.timer = setInterval(() => {
+      const p = Math.min(100, this.state.p + 0.5);
+      if (p >= 100) {
+        clearInterval(this.timer); this.timer = null;
+        this.setState({ p: 100, running: false, toast: true });
+        this.tt = setTimeout(() => this.setState({ toast: false }), 4500);
+      } else this.setState({ p: p });
+    }, 40);
+  }
+  dotLine(vals, lo, hi, h, cls) {
+    return vals.map((v, i) => ({ x: (i / (vals.length - 1) * 94).toFixed(1), y: Math.round((v - lo) / (hi - lo) * (h - 6)), c: cls ? cls(v, i) : 'd-ok', d: (0.3 + i * 0.03).toFixed(2) }));
+  }
+  renderVals() {
+    const S = this.state;
+    const scr = S.screen;
+    const navOf = scr === 'profile' ? 'sets' : scr;
+    let seed = 11; const rnd = () => { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; };
+    const icons = {
+      dash: 'M4 4h7v9H4zM13 4h7v5h-7zM13 11h7v9h-7zM4 15h7v5H4z',
+      sets: 'M4 6c0-1.1 3.6-2 8-2s8 .9 8 2-3.6 2-8 2-8-.9-8-2zM4 6v12c0 1.1 3.6 2 8 2s8-.9 8-2V6M4 12c0 1.1 3.6 2 8 2s8-.9 8-2',
+      rules: 'M10 6h10M10 12h10M10 18h10M4 6l1.2 1.2L7.5 5M4 12l1.2 1.2 2.3-2.2M4 18l1.2 1.2 2.3-2.2',
+      checks: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM10 8.5l5 3.5-5 3.5z',
+      sched: 'M4 6h16v14H4zM4 10h16M8 3v4M16 3v4M8 14h3M13 14h3M8 17h3',
+      audit: 'M4 20V11M10 20V5M16 20v-6M21 20H3',
+      inc: 'M12 4l9 15H3zM12 10v4M12 17h.01',
+      reports: 'M7 3h7l5 5v13H7zM14 3v5h5M10 13h6M10 17h6',
+      lic: 'M12 3l7 3v6c0 4-3 7.5-7 9-4-1.5-7-5-7-9V6zM9 12l2 2 4-4',
+      settings: 'M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM19 12h2M3 12h2M12 3v2M12 19v2M17 7l1.4-1.4M5.6 18.4L7 17M17 17l1.4 1.4M5.6 5.6L7 7'
+    };
+    const sugCount = Object.keys(S.rs).filter((k) => S.rs[k] === 'sug').length + 15;
+    const n1 = [['dash', 'Обзор'], ['sets', 'Наборы данных'], ['rules', 'Правила'], ['checks', 'Проверки'], ['sched', 'Регламент'], ['audit', 'Аудит'], ['inc', 'Инциденты'], ['reports', 'Отчёты']];
+    const n2 = [['lic', 'Лицензия'], ['settings', 'Настройки']];
+    const mk = (a) => ({ label: a[1], d: icons[a[0]], cls: navOf === a[0] ? 'on' : '', go: () => this.go(a[0]),
+      hasBadge: a[0] === 'rules' || a[0] === 'inc', badge: a[0] === 'rules' ? String(sugCount) : '13', bcls: a[0] === 'rules' ? 'hi' : '' });
+    const all = n1.map((a) => a[0]).concat(n2.map((a) => a[0]));
+    const idx = all.indexOf(navOf);
+    const pillY = idx < 8 ? idx * 46 : 8 * 46 + 36 + (idx - 8) * 46;
+    const titles = { dash: 'Обзор', sets: 'Наборы данных', profile: 'Профиль набора', rules: 'Правила качества', checks: 'Проверки', sched: 'Регламент проверок', audit: 'Аудит качества', inc: 'Инциденты', reports: 'Отчёты', lic: 'Лицензия', settings: 'Настройки' };
+
+    const L = {
+      active: { plan: 'Team', badge: 'Лицензия активна', cls: 'ok', short: '214 дн.', sideColor: '#C9EC5F', sidePct: 41, sideBar: '#C9EC5F', sideNote: 'до 17.05.2027 · 18 из 25 наборов', banner: false, dateLabel: 'Действует до', date: '17.05.2027', cta: 'Управление тарифом' },
+      trial: { plan: 'Пробная', badge: 'Пробный период · 9 дн.', cls: 'sug', short: '9 дн.', sideColor: '#C9CBD1', sidePct: 64, sideBar: '#AEB4C2', sideNote: 'до 24.10.2026 · 5 из 5 наборов', banner: true, bBg: '#EDEFF3', bFg: '#2B3243', bTitle: 'Пробный период до 24.10.2026.', bText: 'Лимит в 5 наборов данных исчерпан.', dateLabel: 'Действует до', date: '24.10.2026', cta: 'Выбрать тариф' },
+      expiring: { plan: 'Team', badge: 'Истекает через 12 дн.', cls: 'warn', short: '12 дн.', sideColor: '#E3A23B', sidePct: 96, sideBar: '#E3A23B', sideNote: 'до 27.10.2026 · 18 из 25 наборов', banner: true, bBg: '#FBF1DD', bFg: '#5A3C05', bTitle: 'Срок лицензии истекает 27.10.2026.', bText: 'После этой даты регламентные проверки будут остановлены.', dateLabel: 'Действует до', date: '27.10.2026', cta: 'Продлить' },
+      expired: { plan: 'Team', badge: 'Лицензия истекла', cls: 'fail', short: 'истекла', sideColor: '#F08B73', sidePct: 100, sideBar: '#E0553A', sideNote: '13.10.2026 · режим чтения', banner: true, bBg: '#FBE7E2', bFg: '#6E1F0F', bTitle: 'Лицензия истекла 13.10.2026.', bText: 'Проверки и генерация правил недоступны, история и отчёты доступны для чтения.', dateLabel: 'Истекла', date: '13.10.2026', cta: 'Продлить' }
+    }[S.lic];
+    const licIds = ['active', 'trial', 'expiring', 'expired'];
+    const licLabels = ['Активна', 'Пробная', 'Истекает', 'Истекла'];
+
+    const DS = [
+      { name: 'sales.orders', owner: 'Отдел продаж', src: 'PostgreSQL', rows: '4 812 090', cols: 24, score: '98.1', rules: 184, last: 'сегодня 09:12', st: 'ok', stl: 'Без нарушений', t: [96, 97, 97, 98, 97, 98, 98, 97, 98, 99, 98, 98] },
+      { name: 'crm.customers', owner: 'CRM', src: 'ClickHouse', rows: '612 447', cols: 31, score: '93.4', rules: 94, last: 'сегодня 08:40', st: 'warn', stl: '3 предупреждения', t: [95, 95, 94, 96, 95, 94, 93, 94, 93, 92, 93, 93] },
+      { name: 'billing.payments', owner: 'Финансы', src: 'PostgreSQL', rows: '9 204 551', cols: 18, score: '99.2', rules: 132, last: 'сегодня 08:00', st: 'ok', stl: 'Без нарушений', t: [99, 99, 98, 99, 99, 99, 100, 99, 99, 98, 99, 99] },
+      { name: 'logistics.shipments', owner: 'Логистика', src: 'Parquet', rows: '1 330 018', cols: 27, score: '71.6', rules: 61, last: 'сегодня 07:30', st: 'fail', stl: '7 нарушений', t: [93, 91, 90, 88, 86, 84, 80, 82, 77, 74, 72, 71] },
+      { name: 'hr.employees', owner: 'HR', src: 'CSV', rows: '3 214', cols: 22, score: '96.8', rules: 40, last: 'вчера 23:00', st: 'ok', stl: 'Без нарушений', t: [96, 97, 96, 97, 97, 96, 97, 97, 96, 97, 97, 97] },
+      { name: 'marketing.events', owner: 'Маркетинг', src: 'ClickHouse', rows: '58 102 334', cols: 14, score: '88.9', rules: 52, last: 'сегодня 06:15', st: 'warn', stl: '5 предупреждений', t: [91, 90, 92, 89, 90, 88, 89, 87, 89, 88, 89, 89] },
+      { name: 'bi.dim_products', owner: 'BI', src: 'PostgreSQL', rows: '12 880', cols: 16, score: '97.5', rules: 38, last: 'вчера 22:00', st: 'ok', stl: 'Без нарушений', t: [97, 97, 98, 97, 97, 98, 97, 98, 97, 97, 98, 97] },
+      { name: 'finance.ledger', owner: 'Финансы', src: 'PostgreSQL', rows: '2 007 115', cols: 20, score: '—', rules: 0, last: '—', st: 'run', stl: 'Профилирование', t: [90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90] }
+    ];
+    const sets = DS.map((d, i) => {
+      const lo = Math.min.apply(null, d.t) - 1, hi = Math.max.apply(null, d.t) + 1;
+      return Object.assign({}, d, { pts: d.st === 'run' ? [] : d.t.map((v, j) => ({ x: (j / 11 * 94).toFixed(1), y: Math.round((v - lo) / (hi - lo) * 16), c: v < 80 ? 'd-fail' : (v < 95 ? 'd-warn' : 'd-ok') })), open: () => this.openSet(i) });
+    });
+
+    const heat = DS.map((d, r) => ({ name: d.name, score: d.score, cells: Array.from({ length: 28 }, (_, c) => {
+      const x = rnd(); let cls = 'd-ok';
+      if (d.name === 'finance.ledger') cls = c > 25 ? 'd-prof' : 'd-none';
+      else if (d.name === 'logistics.shipments') cls = c > 18 ? (x < .55 ? 'd-fail' : 'd-warn') : (x < .15 ? 'd-warn' : 'd-ok');
+      else if (d.st === 'warn') cls = x < .22 ? 'd-warn' : (x < .25 ? 'd-fail' : 'd-ok');
+      else cls = x < .05 ? 'd-warn' : (x < .08 ? 'd-none' : 'd-ok');
+      return { cls: cls, d: (c * 0.012 + r * 0.03).toFixed(3), t: d.name + ' · ' + (c + 18) + ' день' };
+    }) }));
+
+    const kp = (base, amp, n) => Array.from({ length: n }, (_, i) => base + Math.sin(i / 2) * amp + rnd() * amp);
+    const kpis = [
+      { l: 'Наборов данных', v: '8', d: '+1 за неделю', c: '#74777F', pts: this.dotLine([6, 6, 6, 7, 7, 7, 7, 7, 7, 7, 8, 8, 8, 8], 5, 9, 30) },
+      { l: 'Активных правил', v: '601', d: '+38 за неделю', c: '#4D6410', pts: this.dotLine([540, 548, 552, 560, 561, 566, 570, 572, 580, 584, 590, 596, 598, 601], 530, 610, 30) },
+      { l: 'Проверок за сутки', v: '46', d: 'по регламенту 44', c: '#74777F', pts: this.dotLine(kp(44, 2, 14), 38, 52, 30) },
+      { l: 'Открытых инцидентов', v: '13', d: '+4 за сутки', c: '#A8361E', pts: this.dotLine([7, 6, 8, 7, 6, 7, 9, 8, 8, 9, 10, 9, 11, 13], 4, 14, 30, (v) => v >= 11 ? 'd-fail' : 'd-ok') }
+    ];
+
+    // beeswarm of rule results
+    const swarmVals = [];
+    for (let i = 0; i < 96; i++) { const x = rnd(); swarmVals.push(x < .55 ? 99.2 + rnd() * .8 : x < .8 ? 97.5 + rnd() * 1.7 : x < .92 ? 95 + rnd() * 2.5 : 90 + rnd() * 5); }
+    const binsS = {}; const swarm0 = swarmVals.map((v) => {
+      const b = Math.min(79, Math.floor((v - 90) / 0.125)); binsS[b] = (binsS[b] || 0) + 1;
+      return { b: b, n: binsS[b] - 1, v: v };
+    });
+    const maxS = Math.max.apply(null, Object.keys(binsS).map((q) => binsS[q]));
+    const stepS = Math.min(11, 150 / maxS);
+    const swarm = swarm0.map((o) => ({ x: ((o.b + 0.5) / 80 * 100).toFixed(2), y: (4 + o.n * stepS).toFixed(1), sz: Math.min(7, stepS - 1.5).toFixed(1), c: o.v < 95 ? 'd-fail' : (o.v < 99 ? 'd-warn' : 'd-ok'), d: (0.2 + (o.v - 90) * 0.05).toFixed(2), t: o.v.toFixed(2) + '%' }));
+
+    const INC = [
+      { title: 'Значения amount вне диапазона', cls: 'Диапазон', ds: 'sales.orders', col: 'amount', cnt: '37 строк', sev: 'fail', when: '12 мин', desc: 'Выше p99.5 профиля (2 450 000), максимум 18 900 000', owner: 'Д. Нуров', sla: 'до 13:12', slaC: '#4B4E57', state: 'Новый', stc: 'fail', k: 'range' },
+      { title: 'Задержка поступления данных', cls: 'Своевременность', ds: 'sales.orders', col: 'created_at', cnt: '26 ч', sev: 'warn', when: '12 мин', desc: 'Последняя запись старше допуска 24 ч; обычная задержка 2–4 ч', owner: 'Д. Нуров', sla: 'до 17:12', slaC: '#4B4E57', state: 'В работе', stc: 'sug', k: 'time' },
+      { title: 'Рост доли пропусков', cls: 'Полнота', ds: 'sales.orders', col: 'discount_pct', cnt: '12.4%', sev: 'warn', when: '12 мин', desc: 'Рост с 9.8% до 12.4% при допуске 15%, третья проверка подряд', owner: 'М. Ким', sla: 'до 17:12', slaC: '#4B4E57', state: 'Новый', stc: 'fail', k: 'null' },
+      { title: 'Ключи без соответствия в справочнике', cls: 'Согласованность', ds: 'logistics.shipments', col: 'customer_id', cnt: '4 102 строки', sev: 'fail', when: '2 ч', desc: 'Нет соответствия в crm.customers.id после загрузки 14.10', owner: 'Т. Абенов', sla: 'просрочено', slaC: '#A8361E', state: 'В работе', stc: 'sug', k: 'fk' },
+      { title: 'Дубликаты идентификатора', cls: 'Уникальность', ds: 'logistics.shipments', col: 'shipment_id', cnt: '918 строк', sev: 'fail', when: '2 ч', desc: 'Уникальность снизилась со 100% до 99.93%', owner: 'Т. Абенов', sla: 'до 11:30', slaC: '#4B4E57', state: 'В работе', stc: 'sug', k: 'uniq' },
+      { title: 'Несоответствие формату номера', cls: 'Формат', ds: 'crm.customers', col: 'phone', cnt: '211 строк', sev: 'warn', when: '1 ч', desc: 'Не соответствуют шаблону +7XXXXXXXXXX', owner: 'М. Ким', sla: 'до 16:40', slaC: '#4B4E57', state: 'Новый', stc: 'fail', k: 'fmt' },
+      { title: 'Смещение распределения', cls: 'Распределение', ds: 'marketing.events', col: 'session_len', cnt: 'PSI 0.22', sev: 'warn', when: '3 ч', desc: 'Медиана выросла с 41 до 58 с после обновления трекера 13.10', owner: 'А. Сейткали', sla: '—', slaC: '#4B4E57', state: 'Решён', stc: 'ok', k: 'dist' }
+    ];
+    const bars = { fail: '#E0553A', warn: '#E3A23B' };
+    const incAll = INC.map((i) => Object.assign({}, i, { bar: bars[i.sev], when: i.when + ' назад' }));
+    const fl0 = [['all', 'Все'], ['range', 'Диапазон'], ['null', 'Полнота'], ['uniq', 'Уникальность'], ['fk', 'Согласованность'], ['fmt', 'Формат'], ['time', 'Своевременность'], ['dist', 'Распределение']];
+    const incFilters = fl0.map((f) => ({ label: f[1], n: f[0] === 'all' ? INC.length : INC.filter((i) => i.k === f[0]).length, cls: S.inc === f[0] ? 'ink' : 'ghost', go: () => this.setState({ inc: f[0] }) }));
+    const incView = S.inc === 'all' ? incAll : incAll.filter((i) => i.k === S.inc);
+
+    // profile
+    const COLS = [
+      { name: 'order_id', type: 'int64', nulls: '0%', uniq: 100, h: [62, 64, 63, 65, 62, 64, 63, 64, 65, 62, 63, 64, 63, 65, 64, 62], band: [0, 31], bandTxt: '1 … 4 812 090', min: '1', mid: '2 406 045', max: '4 812 090', stats: [['Тип', 'int64'], ['Пропуски', '0'], ['Уникальных', '4 812 090'], ['Минимум', '1'], ['Максимум', '4 812 090'], ['Порядок', 'возрастает'], ['Профилей', '12'], ['Дрейф, PSI', '0.00']], rules: [['not_null(order_id)', 'нет пропусков в 12 профилях', '1.00', 'ok', 'Активно'], ['unique(order_id)', 'уникальность 100%', '1.00', 'ok', 'Активно']] },
+      { name: 'customer_id', type: 'int64', nulls: '0.02%', uniq: 38, h: [30, 48, 62, 70, 74, 72, 66, 60, 54, 48, 42, 38, 32, 28, 22, 18], band: [0, 31], bandTxt: '10 … 612 447', min: '10', mid: '306 000', max: '612 447', stats: [['Тип', 'int64'], ['Пропуски', '962 · 0.02%'], ['Уникальных', '1 838 211'], ['Связь', 'crm.customers.id'], ['Покрытие связи', '99.98%'], ['Мода', '48 113 · 214 раз'], ['Профилей', '12'], ['Дрейф, PSI', '0.03']], rules: [['fk(customer_id → crm.customers.id)', '99.98% значений найдены в справочнике', '0.79', 'sug', 'На рассмотрении']] },
+      { name: 'amount', type: 'decimal', nulls: '0.1%', uniq: 61, h: [18, 42, 76, 100, 92, 74, 56, 40, 30, 22, 16, 11, 8, 5, 3, 6], e: [26, 58, 92, 100, 82, 60, 42, 28, 20, 14, 10, 7, 5, 3, 1, 0], out: [30, 31], band: [0, 29], bandTxt: 'p0 … p99.5', min: '0', mid: '1 225 000', max: '18 900 000', flag: 'fail', stats: [['Тип', 'decimal(14,2)'], ['Пропуски', '4 812 · 0.1%'], ['Среднее', '184 300'], ['Медиана', '96 500'], ['p1 / p99', '1 200 / 1 980 000'], ['p99.5', '2 450 000'], ['Вне диапазона', '37 строк'], ['Дрейф, PSI', '0.27']], rules: [['between(amount, 0, 2 450 000)', 'границы по p0 и p99.5 профиля', '0.96', 'sug', 'На рассмотрении'], ['psi(amount, profile) < 0.2', 'PSI между профилями не выше 0.06', '0.84', 'sug', 'На рассмотрении']] },
+      { name: 'city', type: 'string', nulls: '0.4%', uniq: 1, h: [100, 66, 22, 14, 10, 8, 6, 5, 4, 3, 2, 2, 1, 1, 1, 1], band: [0, 31], bandTxt: '14 значений', min: 'Алматы · 41%', mid: '', max: 'Тараз · 0.2%', flag: 'warn', stats: [['Тип', 'string'], ['Пропуски', '19 248 · 0.4%'], ['Различных', '14'], ['Алматы', '41%'], ['Астана', '27%'], ['Шымкент', '9%'], ['Новое значение', '«Алматы » с пробелом'], ['Дрейф, PSI', '0.01']], rules: [['trim(city) = city', 'в профиле нет пробелов по краям', '0.95', 'ok', 'Активно'], ['in_set(city, справочник)', '14 значений во всех профилях', '0.92', 'sug', 'На рассмотрении']] },
+      { name: 'status', type: 'enum', nulls: '0%', uniq: 1, h: [12, 34, 100, 58, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], band: [0, 9], bandTxt: '5 значений', min: 'new', mid: '', max: 'cancelled', stats: [['Тип', 'enum'], ['Пропуски', '0'], ['Значений', '5 из 5'], ['delivered', '52%'], ['shipped', '29%'], ['paid', '9%'], ['cancelled', '4%'], ['new', '6%']], rules: [['in_set(status, [new, paid, shipped, delivered, cancelled])', '5 значений во всех профилях', '0.99', 'sug', 'На рассмотрении']] },
+      { name: 'created_at', type: 'timestamp', nulls: '0%', uniq: 92, h: [20, 24, 30, 34, 40, 46, 50, 56, 60, 64, 70, 74, 80, 86, 92, 40], band: [0, 31], bandTxt: '2023-01-01 … сегодня', min: '2023-01-01', mid: '2024-11-20', max: '2026-10-14 07:02', flag: 'warn', stats: [['Тип', 'timestamp'], ['Пропуски', '0'], ['Минимум', '2023-01-01'], ['Максимум', '2026-10-14 07:02'], ['Строк в сутки', '≈ 4 300'], ['Задержка', '26 ч'], ['Допуск', '24 ч'], ['Дрейф, PSI', '—']], rules: [['freshness(created_at) ≤ 24 ч', 'обычная задержка 2–4 ч', '0.91', 'sug', 'На рассмотрении']] },
+      { name: 'discount_pct', type: 'float', nulls: '12.4%', uniq: 3, h: [100, 70, 44, 30, 22, 14, 10, 8, 6, 4, 3, 2, 2, 1, 1, 1], band: [0, 31], bandTxt: '0 … 45', min: '0', mid: '22.5', max: '45', flag: 'warn', stats: [['Тип', 'float'], ['Пропуски', '596 699 · 12.4%'], ['Пропуски в профиле', '9.8%'], ['Мин / Макс', '0 / 45'], ['Медиана', '5'], ['Нулевых', '38%'], ['Допуск пропусков', '15%'], ['Дрейф, PSI', '0.14']], rules: [['null_share(discount_pct) ≤ 15%', 'пропуски 8–10%, допуск с запасом', '0.88', 'sug', 'На рассмотрении'], ['between(discount_pct, 0, 45)', 'значения 0–45 во всех профилях', '0.97', 'sug', 'На рассмотрении']] },
+      { name: 'channel', type: 'string', nulls: '0%', uniq: 1, h: [100, 78, 40, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], band: [0, 7], bandTxt: '4 значения', min: 'web · 44%', mid: '', max: 'partner · 6%', stats: [['Тип', 'string'], ['Пропуски', '0'], ['Различных', '4'], ['web', '44%'], ['app', '34%'], ['offline', '16%'], ['partner', '6%'], ['Дрейф, PSI', '0.02']], rules: [['in_set(channel, [web, app, offline, partner])', '4 значения во всех профилях', '0.98', 'ok', 'Активно']] }
+    ];
+    const flagC = { fail: '#E0553A', warn: '#E3A23B' };
+    const cols = COLS.map((c, i) => ({ name: c.name, type: c.type, nulls: c.nulls, uniq: c.uniq, on: S.col === i ? 'on' : '', pick: () => this.setState({ col: i }), hasFlag: !!c.flag, flagC: flagC[c.flag] || '#0E0F12' }));
+    const cc = COLS[S.col];
+    const interp = (a) => { const r = []; for (let i = 0; i < 16; i++) { r.push(a[i]); r.push(i < 15 ? Math.round((a[i] + a[i + 1]) / 2) : Math.round(a[i] * 0.6)); } return r; };
+    const cur = interp(cc.h), exp = interp(cc.e || cc.h);
+    const MAXD = 14;
+    const col = {
+      name: cc.name, min: cc.min, mid: cc.mid, max: cc.max, bandTxt: cc.bandTxt,
+      bandL: (cc.band[0] / 32 * 100).toFixed(2), bandW: ((cc.band[1] - cc.band[0] + 1) / 32 * 100).toFixed(2),
+      bins: cur.map((h, i) => {
+        const n = Math.round(h / 100 * MAXD); const inBand = i >= cc.band[0] && i <= cc.band[1]; const isOut = (cc.out || []).indexOf(i) >= 0;
+        const dots = []; for (let k = 0; k < Math.max(n, isOut ? 1 : 0); k++) dots.push({ c: isOut ? 'd-fail' : (inBand ? 'd-ok' : 'd-soft'), dl: (0.1 + i * 0.015 + k * 0.02).toFixed(3) });
+        const en = Math.round(exp[i] / 100 * MAXD);
+        return { dots: dots, tk: 3 + en * 11 - 2, to: en > 0 ? 1 : 0 };
+      }),
+      stats: cc.stats.map((s) => ({ k: s[0], v: s[1] })),
+      rules: cc.rules.map((r) => ({ e: r[0], w: r[1], c: r[2], s: r[3], sl: r[4] }))
+    };
+
+    // rules
+    const RULES = [
+      { id: 1, expr: 'not_null(order_id)', dim: 'Полнота', col: 'order_id', conf: 1.0, why: 'нет пропусков на 4.8 млн строк во всех 12 профилях', thr: '0', onProf: '0 нарушений', crit: 'Высокая' },
+      { id: 2, expr: 'unique(order_id)', dim: 'Уникальность', col: 'order_id', conf: 1.0, why: 'уникальность 100%, значения монотонно возрастают', thr: '100%', onProf: '0 нарушений', crit: 'Высокая' },
+      { id: 3, expr: 'between(amount, 0, 2 450 000)', dim: 'Диапазон', col: 'amount', conf: 0.96, why: 'границы по p0 и p99.5 профиля; отрицательных значений не было', thr: '0 … 2 450 000', onProf: '0.5% строк', crit: 'Средняя' },
+      { id: 4, expr: 'null_share(discount_pct) ≤ 15%', dim: 'Полнота', col: 'discount_pct', conf: 0.88, why: 'доля пропусков стабильно 8–10%, допуск с запасом', thr: '15%', onProf: '9.8%', crit: 'Низкая' },
+      { id: 5, expr: 'in_set(status, [new, paid, shipped, delivered, cancelled])', dim: 'Допустимые значения', col: 'status', conf: 0.99, why: 'ровно 5 значений во всех профилях', thr: '5 значений', onProf: '0 нарушений', crit: 'Высокая' },
+      { id: 6, expr: 'regex(phone, ^\\+7\\d{10}$)', dim: 'Формат', col: 'phone', conf: 0.93, why: '99.7% значений соответствуют шаблону', thr: '≥ 99.5%', onProf: '0.3% строк', crit: 'Средняя' },
+      { id: 7, expr: 'freshness(created_at) ≤ 24 ч', dim: 'Своевременность', col: 'created_at', conf: 0.91, why: 'обычная задержка 2–4 ч, загрузка ежедневно', thr: '24 ч', onProf: '4 ч', crit: 'Средняя' },
+      { id: 8, expr: 'psi(amount, profile) < 0.2', dim: 'Распределение', col: 'amount', conf: 0.84, why: 'PSI между профилями не превышал 0.06', thr: '0.2', onProf: 'PSI 0.06', crit: 'Низкая' },
+      { id: 9, expr: 'fk(customer_id → crm.customers.id)', dim: 'Согласованность', col: 'customer_id', conf: 0.79, why: 'совпадает имя, 99.98% значений найдены в справочнике', thr: '≥ 99.9%', onProf: '0.02% строк', crit: 'Высокая' },
+      { id: 10, expr: 'row_count ±15% к предыдущей проверке', dim: 'Объём', col: '—', conf: 0.77, why: 'суточный прирост 3–5 тыс. строк, колебания до 9%', thr: '±15%', onProf: '+0.09%', crit: 'Низкая' },
+      { id: 11, expr: 'trim(city) = city', dim: 'Формат', col: 'city', conf: 0.95, why: 'в профиле нет значений с пробелами по краям', thr: '100%', onProf: '0 нарушений', crit: 'Низкая' },
+      { id: 12, expr: 'between(discount_pct, 0, 45)', dim: 'Диапазон', col: 'discount_pct', conf: 0.97, why: 'значения 0–45 во всех профилях', thr: '0 … 45', onProf: '0 нарушений', crit: 'Средняя' }
+    ];
+    const setR = (id, v) => { const rs = Object.assign({}, this.state.rs); rs[id] = v; this.setState({ rs: rs }); };
+    const rulesView = RULES.filter((r) => S.rs[r.id] === S.rtab).map((r) => {
+      const st = S.rs[r.id];
+      return { expr: r.expr, why: r.why, dim: r.dim, conf: r.conf.toFixed(2), confW: Math.round(r.conf * 100),
+        isSug: st === 'sug', isAct: st === 'act', isRej: st === 'rej', ckOn: st === 'act' ? 'on' : '',
+        toggle: () => setR(r.id, st === 'act' ? 'sug' : 'act'), accept: () => setR(r.id, 'act'), reject: () => setR(r.id, 'rej'), open: () => this.setState({ sel: r.id }) };
+    });
+    const counts = { sug: 0, act: 0, rej: 0 };
+    Object.keys(S.rs).forEach((k) => { counts[S.rs[k]]++; });
+    const rt = [['sug', 'На рассмотрении · ' + counts.sug], ['act', 'Активные · ' + counts.act], ['rej', 'Отклонённые · ' + counts.rej]];
+    const rti = rt.map((t) => t[0]).indexOf(S.rtab);
+    const selR = RULES.filter((r) => r.id === S.sel)[0];
+    const selSt = selR ? S.rs[selR.id] : 'sug';
+    const sel = selR ? Object.assign({}, selR, { conf: selR.conf.toFixed(2), stCls: selSt === 'act' ? 'ok' : (selSt === 'rej' ? 'idle' : 'sug'), stl: selSt === 'act' ? 'Активно' : (selSt === 'rej' ? 'Отклонено' : 'Предложено системой') }) : {};
+
+    // flow
+    const k = 200 / 212, top0 = 20, gap = 10, xs = [0, 220, 440, 660];
+    const node = (x, y, n) => ({ x: x, y: y.toFixed(1), h: (n * k).toFixed(1), yy: y, hh: n * k, lx: x + 22, ly: (y + Math.min(n * k, 60) / 2 + 6).toFixed(1) });
+    const n0 = node(xs[0], top0, 212);
+    const n1a = node(xs[1], top0, 148); const n1b = node(xs[1], top0 + 148 * k + gap, 64);
+    const n2a = node(xs[2], top0, 112); const n2b = node(xs[2], top0 + 112 * k + gap, 15); const n2c = node(xs[2], top0 + 127 * k + gap * 2, 21);
+    const n3a = node(xs[3], top0, 104); const n3b = node(xs[3], top0 + 104 * k + gap, 8);
+    const band = (x0, a0, b0, x1, a1, b1) => { const xm = (x0 + x1) / 2; return 'M' + x0 + ' ' + a0 + ' C' + xm + ' ' + a0 + ' ' + xm + ' ' + a1 + ' ' + x1 + ' ' + a1 + ' L' + x1 + ' ' + b1 + ' C' + xm + ' ' + b1 + ' ' + xm + ' ' + b0 + ' ' + x0 + ' ' + b0 + ' Z'; };
+    const fl = {
+      n0: n0, n1a: n1a, n1b: n1b, n2a: n2a, n2b: n2b, n2c: n2c, n3a: n3a, n3b: n3b,
+      b1: band(12, n0.yy, n0.yy + 148 * k, xs[1], n1a.yy, n1a.yy + n1a.hh),
+      b2: band(12, n0.yy + 148 * k, n0.yy + 212 * k, xs[1], n1b.yy, n1b.yy + n1b.hh),
+      b3: band(xs[1] + 12, n1a.yy, n1a.yy + 112 * k, xs[2], n2a.yy, n2a.yy + n2a.hh),
+      b4: band(xs[1] + 12, n1a.yy + 112 * k, n1a.yy + 127 * k, xs[2], n2b.yy, n2b.yy + n2b.hh),
+      b5: band(xs[1] + 12, n1a.yy + 127 * k, n1a.yy + 148 * k, xs[2], n2c.yy, n2c.yy + n2c.hh),
+      b6: band(xs[2] + 12, n2a.yy, n2a.yy + 104 * k, xs[3], n3a.yy, n3a.yy + n3a.hh),
+      b7: band(xs[2] + 12, n2a.yy + 104 * k, n2a.yy + 112 * k, xs[3], n3b.yy, n3b.yy + n3b.hh)
+    };
+    // confidence swarm
+    const confBins = {}; const confSwarm = [];
+    for (let i = 0; i < 148; i++) {
+      const x = rnd(); const v = x < .5 ? 0.95 + rnd() * 0.05 : x < .8 ? 0.88 + rnd() * 0.07 : 0.75 + rnd() * 0.13;
+      const b = Math.min(24, Math.floor((v - 0.75) / 0.01)); confBins[b] = (confBins[b] || 0) + 1;
+      const r = rnd(); const c = v >= 0.9 ? (r < .82 ? 'd-ok' : 'd-sug') : (r < .45 ? 'd-ok' : r < .7 ? 'd-sug' : 'd-rej');
+      confSwarm.push({ x: ((b + 0.5) / 25 * 100).toFixed(2), y: 4 + (confBins[b] - 1) * 9, c: c, d: (0.2 + b * 0.03).toFixed(2) });
+    }
+    const DIMS = [['Полнота', 38, 6], ['Уникальность', 14, 2], ['Диапазон', 31, 9], ['Допустимые значения', 19, 3], ['Формат', 12, 4], ['Своевременность', 9, 2], ['Согласованность', 11, 5], ['Распределение', 14, 6]];
+    const dimStats = DIMS.map((d) => ({ name: d[0], a: d[1], s: d[2], total: d[1] + d[2], aw: (d[1] / 47 * 100).toFixed(1), sw: (d[2] / 47 * 100).toFixed(1) }));
+
+    // checks
+    const p = S.ran ? Math.floor(S.p) : 0;
+    const doneN = Math.round(184 * (S.ran ? S.p : 0) / 100);
+    const FAILS = [41, 122], WARNS = [29, 56, 77, 98, 141, 163];
+    const res = (i) => FAILS.indexOf(i) >= 0 ? 'd-fail' : (WARNS.indexOf(i) >= 0 ? 'd-warn' : 'd-ok');
+    if (!this.rank) { let sd = 3; const rr = () => { sd = (sd * 9301 + 49297) % 233280; return sd / 233280; }; const key = Array.from({ length: 184 }, (_, i) => i + rr() * 70); const ord = Array.from({ length: 184 }, (_, i) => i).sort((a, b) => key[a] - key[b]); this.rank = []; ord.forEach((cell, r) => { this.rank[cell] = r; }); }
+    const RK = this.rank;
+    const grid = Array.from({ length: 184 }, (_, i) => { const r = RK[i]; return { c: r < doneN ? res(r) : (S.running && r < doneN + 4 ? 'd-cur' : 'd-pend') }; });
+    let fail = 0, warn = 0; for (let i = 0; i < doneN; i++) { if (FAILS.indexOf(i) >= 0) fail++; else if (WARNS.indexOf(i) >= 0) warn++; }
+    const logAll = [
+      [1, '09:41:02', 'Запуск проверки № 2815 · 184 правила', '#C9CBD1'],
+      [6, '09:41:03', 'Профиль загружен · 24 колонки', '#C9CBD1'],
+      [16, '09:41:05', 'WARN  null_share(discount_pct) = 12.4%', '#E3A23B'],
+      [23, '09:41:07', 'FAIL  between(amount) · 37 строк вне диапазона', '#F08B73'],
+      [40, '09:41:10', 'OK    unique(order_id) · 4 812 090 из 4 812 090', '#C9EC5F'],
+      [54, '09:41:12', 'WARN  freshness(created_at) = 26 ч', '#E3A23B'],
+      [67, '09:41:14', 'FAIL  psi(amount, profile) = 0.27', '#F08B73'],
+      [100, '09:41:18', 'Завершено · 176 без нарушений · 6 предупр. · 2 нарушения', '#C9EC5F']
+    ];
+    const log = S.ran ? logAll.filter((l) => p >= l[0]).map((l) => ({ t: l[1], s: l[2], c: l[3] })) : [{ t: '—', s: 'Проверка не запущена', c: '#6E717A' }];
+    const run = { p: p, grid: grid, done: doneN + ' / 184', pass: doneN - warn - fail, warn: warn, fail: fail, log: log,
+      cls: S.running ? 'run' : (S.ran && p >= 100 ? 'fail' : 'idle'), label: S.running ? 'Выполняется' : (S.ran && p >= 100 ? 'Завершена с нарушениями' : 'Ожидает запуска') };
+    const runs = [
+      { id: '2814', ds: 'sales.orders', when: 'сегодня 09:12', p: 176, w: 6, f: 2, dur: '2 мин 14 с', trig: 'Регламент', st: 'fail', stl: '2 нарушения' },
+      { id: '2813', ds: 'crm.customers', when: 'сегодня 08:40', p: 91, w: 3, f: 0, dur: '48 с', trig: 'Регламент', st: 'warn', stl: '3 предупреждения' },
+      { id: '2812', ds: 'billing.payments', when: 'сегодня 08:00', p: 131, w: 1, f: 0, dur: '3 мин 02 с', trig: 'Airflow', st: 'ok', stl: 'Без нарушений' },
+      { id: '2811', ds: 'logistics.shipments', when: 'сегодня 07:30', p: 43, w: 11, f: 7, dur: '1 мин 37 с', trig: 'Регламент', st: 'fail', stl: '7 нарушений' },
+      { id: '2810', ds: 'marketing.events', when: 'сегодня 06:15', p: 47, w: 5, f: 0, dur: '6 мин 40 с', trig: 'М. Ким', st: 'warn', stl: '5 предупреждений' },
+      { id: '2809', ds: 'hr.employees', when: 'вчера 23:00', p: 40, w: 0, f: 0, dur: '6 с', trig: 'Регламент', st: 'ok', stl: 'Без нарушений' },
+      { id: '2808', ds: 'bi.dim_products', when: 'вчера 22:00', p: 37, w: 1, f: 0, dur: '9 с', trig: 'CI', st: 'ok', stl: 'Без нарушений' }
+    ];
+
+    // schedule
+    const hx = (h) => (h / 24 * 100).toFixed(2);
+    const PL = [
+      ['billing.payments', [[2, 'd-ok'], [8, 'd-ok'], [14, 'd-pend'], [20, 'd-pend']]],
+      ['sales.orders', [[3, 'd-ok'], [9.2, 'd-fail'], [15, 'd-pend'], [21, 'd-pend']]],
+      ['crm.customers', [[8.67, 'd-warn'], [20.67, 'd-pend']]],
+      ['logistics.shipments', [[7.5, 'd-fail'], [13.5, 'd-pend'], [19.5, 'd-pend']]],
+      ['marketing.events', [[6.25, 'd-warn'], [18.25, 'd-pend']]],
+      ['hr.employees', [[23, 'd-pend']]],
+      ['bi.dim_products', [[10, 'd-pend'], [22, 'd-pend']]]
+    ];
+    const plan = PL.map((r, ri) => ({ name: r[0], pts: r[1].map((q, qi) => ({ x: hx(q[0]), c: q[1], d: (0.2 + ri * 0.05 + qi * 0.04).toFixed(2), t: r[0] + ' · ' + Math.floor(q[0]) + ':' + String(Math.round((q[0] % 1) * 60)).padStart(2, '0') })) }));
+    const sched = [
+      { ds: 'billing.payments', freq: 'Каждые 6 часов', cron: '0 */6 * * *', next: 'сегодня 14:00', sla: '30 мин', owner: 'А. Сейткали', notify: 'Telegram, почта', st: 'ok', stl: 'Активно' },
+      { ds: 'sales.orders', freq: 'Каждые 6 часов', cron: '12 3/6 * * *', next: 'сегодня 15:12', sla: '1 ч', owner: 'Д. Нуров', notify: 'Telegram', st: 'ok', stl: 'Активно' },
+      { ds: 'crm.customers', freq: 'Дважды в сутки', cron: '40 8,20 * * *', next: 'сегодня 20:40', sla: '2 ч', owner: 'М. Ким', notify: 'Почта', st: 'ok', stl: 'Активно' },
+      { ds: 'logistics.shipments', freq: 'Каждые 6 часов', cron: '30 1/6 * * *', next: 'сегодня 13:30', sla: '1 ч', owner: 'Т. Абенов', notify: 'Telegram, webhook', st: 'warn', stl: 'SLA нарушен' },
+      { ds: 'marketing.events', freq: 'Дважды в сутки', cron: '15 6,18 * * *', next: 'сегодня 18:15', sla: '4 ч', owner: 'М. Ким', notify: 'Почта', st: 'ok', stl: 'Активно' },
+      { ds: 'hr.employees', freq: 'Ежедневно', cron: '0 23 * * *', next: 'сегодня 23:00', sla: '12 ч', owner: 'А. Сейткали', notify: 'Почта', st: 'ok', stl: 'Активно' },
+      { ds: 'finance.ledger', freq: 'Не задано', cron: '—', next: '—', sla: '—', owner: '—', notify: '—', st: 'idle', stl: 'Черновик' }
+    ];
+
+    // audit
+    let s2 = 5; const r2 = () => { s2 = (s2 * 9301 + 49297) % 233280; return s2 / 233280; };
+    const N = 30, W = 900;
+    const yv = (v) => 22 + (100 - v) / 30 * 165;
+    const med = [], mn = [], mx = [];
+    for (let i = 0; i < N; i++) {
+      const base = 93 + Math.sin(i / 4) * 1.2 + i * 0.05;
+      med.push(base + (r2() - 0.5)); mx.push(Math.min(100, base + 4 + r2() * 1.5));
+      mn.push(Math.max(72, i > 18 ? 74 + (29 - i) * 0.4 + r2() * 3 - (i - 18) * 0.3 : 84 + r2() * 4));
+    }
+    const X = (i) => (i * W / (N - 1)).toFixed(1);
+    const tl = {
+      med: med.map((v, i) => (i ? 'L' : 'M') + X(i) + ' ' + yv(v).toFixed(1)).join(' '),
+      band: mx.map((v, i) => (i ? 'L' : 'M') + X(i) + ' ' + yv(v).toFixed(1)).join(' ') + ' ' + mn.slice().reverse().map((v, j) => 'L' + X(N - 1 - j) + ' ' + yv(v).toFixed(1)).join(' ') + ' Z',
+      marks: mn.map((v, i) => ({ v: v, i: i })).filter((o) => o.v < 80).map((o) => ({ x: (o.i / (N - 1) * 100).toFixed(2), y: Math.round(yv(o.v)), t: 'logistics.shipments · ' + o.v.toFixed(1) }))
+    };
+    const ruleNames = ['not_null(order_id)', 'unique(order_id)', 'between(amount)', 'null_share(discount)', 'in_set(status)', 'regex(phone)', 'freshness(created_at)', 'psi(amount)', 'fk(customer_id)', 'row_count ±15%'];
+    const matrix = ruleNames.map((n, ri) => ({ name: n, cells: Array.from({ length: 24 }, (_, ci) => {
+      const x = r2(); let s = 5, c = '#D6D6CF';
+      const risky = ri === 2 || ri === 3 || ri === 6 || ri === 7 || ri === 8;
+      if (risky && x < (ci > 16 ? 0.6 : 0.18)) { const big = x < 0.2; s = big ? 14 : 10; c = big ? '#E0553A' : '#E3A23B'; }
+      else if (!risky && x < 0.04) { s = 9; c = '#E3A23B'; }
+      return { s: s, c: c, d: (ci * 0.015 + ri * 0.03).toFixed(3) };
+    }) }));
+    const CL = [['Диапазон и выбросы', 58, '#0E0F12'], ['Полнота', 44, '#3E4659'], ['Согласованность', 37, '#6B7488'], ['Своевременность', 29, '#AEB4C2'], ['Уникальность', 21, '#8FB82A'], ['Формат', 14, '#C9EC5F'], ['Распределение', 10, '#E2E6D2']];
+    const classes = CL.map((c, i) => ({ name: c[0], n: c[1], bg: c[2], d: (i * 0.06).toFixed(2) }));
+    const DM = [['Полнота', 98.7], ['Уникальность', 99.9], ['Валидность', 94.2], ['Согласованность', 91.0], ['Своевременность', 86.5], ['Стабильность распределений', 92.3]];
+    const dims = DM.map((d, i) => ({ name: d[0], v: d[1].toFixed(1), w: Math.max(2, Math.round((d[1] - 90) * 10)), dot: d[1] >= 95 ? '#C9EC5F' : (d[1] >= 90 ? '#E3A23B' : '#E0553A'), dl: (0.1 + i * 0.07).toFixed(2), dl2: (0.9 + i * 0.07).toFixed(2) }));
+    const per = ['7 дней', '30 дней', '90 дней'];
+
+    const REP = [
+      { title: 'sales.orders · проверка № 2814', meta: '15.10.2026 09:14 · сформирован автоматически', score: '98.1' },
+      { title: 'Все наборы · 41-я неделя', meta: '13.10.2026 09:00 · еженедельный', score: '94.6' },
+      { title: 'logistics.shipments · разбор инцидентов', meta: '14.10.2026 18:30 · Т. Абенов', score: '71.6' },
+      { title: 'billing.payments · III квартал', meta: '01.10.2026 · по запросу финансового отдела', score: '99.2' }
+    ];
+    const reports = REP.map((r, i) => Object.assign({}, r, { bc: S.rep === i ? '#0E0F12' : '#E4E4DE', pick: () => this.setState({ rep: i }) }));
+    const tgl = (key) => () => { const t = Object.assign({}, this.state.tg); t[key] = !t[key]; this.setState({ tg: t }); };
+    const GS = ['Чтение профиля · 24 колонки', 'Поиск закономерностей', 'Расчёт порогов по квантилям', 'Оценка уверенности'];
+
+    return {
+      pillY: pillY, nav1: n1.map(mk), nav2: n2.map(mk), sugCount: sugCount,
+      title: scr === 'profile' ? DS[S.ds].name : titles[scr],
+      crumb: scr === 'profile' ? 'Analytics / Наборы данных / Профиль' : 'Analytics / ' + titles[scr],
+      is: { dash: scr === 'dash', sets: scr === 'sets', profile: scr === 'profile', rules: scr === 'rules', checks: scr === 'checks', sched: scr === 'sched', audit: scr === 'audit', inc: scr === 'inc', reports: scr === 'reports', lic: scr === 'lic', settings: scr === 'settings' },
+      lic: L, licX: (licIds.indexOf(S.lic) * 100) + '%',
+      licTabs: licIds.map((id, i) => ({ label: licLabels[i], cls: S.lic === id ? 'on' : '', go: () => this.setState({ lic: id }) })),
+      runDisabled: S.lic === 'expired', genDisabled: S.lic === 'expired',
+      runBusy: S.running ? 'busy' : '', isRunning: S.running, notRunning: !S.running,
+      runLabel: S.running ? 'Выполняется · ' + Math.floor(S.p) + '%' : 'Запустить проверку',
+      startRun: () => this.startRun(), startGen: () => this.startGen(),
+      goLic: () => this.go('lic'), goInc: () => this.setState({ screen: 'inc', toast: false }), goRules: () => this.go('rules'), goSets: () => this.go('sets'), goReports: () => this.go('reports'),
+      kpis: kpis, heat: heat, swarm: swarm, incTop: incAll.slice(0, 4), sets: sets,
+      ds: DS[S.ds], cols: cols, col: col, loading: S.loading, loaded: !S.loading,
+      fl: fl, confSwarm: confSwarm, dimStats: dimStats,
+      rtabs: rt.map((t) => ({ label: t[1], cls: S.rtab === t[0] ? 'on' : '', go: () => this.setState({ rtab: t[0] }) })), rtabX: (rti * 100) + '%',
+      rulesView: rulesView, rulesEmpty: rulesView.length === 0,
+      acceptAll: () => { const rs = Object.assign({}, this.state.rs); RULES.forEach((r) => { if (rs[r.id] === 'sug' && r.conf >= 0.9) rs[r.id] = 'act'; }); this.setState({ rs: rs }); },
+      hasRule: !!selR, sel: sel,
+      closeRule: () => this.setState({ sel: null }),
+      acceptSel: () => { if (selR) setR(selR.id, 'act'); this.setState({ sel: null }); },
+      rejectSel: () => { if (selR) setR(selR.id, 'rej'); this.setState({ sel: null }); },
+      run: run, runs: runs, plan: plan, sched: sched,
+      tl: tl, matrix: matrix, classes: classes, dims: dims,
+      periods: per.map((l, i) => ({ label: l, cls: S.per === i ? 'on' : '', go: () => this.setState({ per: i }) })), perX: (S.per * 100) + '%',
+      incFilters: incFilters, incView: incView,
+      reports: reports, rep: REP[S.rep],
+      repRules: [{ e: 'between(amount, 0, 2 450 000)', s: 'fail', v: '37 строк' }, { e: 'psi(amount, profile) < 0.2', s: 'fail', v: 'PSI 0.27' }, { e: 'null_share(discount_pct) ≤ 15%', s: 'warn', v: '12.4%' }, { e: 'freshness(created_at) ≤ 24 ч', s: 'warn', v: '26 ч' }],
+      tgWeekly: S.tg.weekly ? 'on' : '', toggleWeekly: tgl('weekly'), tgAuto: S.tg.auto ? 'on' : '', toggleAuto: tgl('auto'),
+      tgTg: S.tg.tg ? 'on' : '', toggleTg: tgl('tg'), tgMail: S.tg.mail ? 'on' : '', toggleMail: tgl('mail'), tgHook: S.tg.hook ? 'on' : '', toggleHook: tgl('hook'),
+      usage: [
+        { name: 'Наборы данных', v: S.lic === 'trial' ? '5 из 5' : '18 из 25', p: S.lic === 'trial' ? 100 : 72, c: S.lic === 'trial' ? '#E3A23B' : '#0E0F12' },
+        { name: 'Проверено строк за месяц', v: '1.24 из 2 млрд', p: 62, c: '#0E0F12' },
+        { name: 'Пользователи', v: '6 из 10', p: 60, c: '#0E0F12' },
+        { name: 'Регламентные задания', v: S.lic === 'expired' ? 'остановлены' : '14 из 50', p: S.lic === 'expired' ? 0 : 28, c: '#0E0F12' }
+      ],
+      plans: [
+        { f: 'Наборы данных', a: '5', b: '25', c: 'без ограничений' },
+        { f: 'Строк в месяц', a: '50 млн', b: '2 млрд', c: 'без ограничений' },
+        { f: 'Генерация правил по профилю', a: 'есть', b: 'есть', c: 'есть' },
+        { f: 'Регламентные проверки и Airflow', a: '—', b: 'есть', c: 'есть' },
+        { f: 'SSO, журнал действий, роли', a: '—', b: 'роли', c: 'полностью' },
+        { f: 'Хранение истории', a: '14 дней', b: '1 год', c: '3 года' }
+      ],
+      sources: [
+        { ab: 'PG', name: 'PostgreSQL · DWH', host: 'dwh.internal:5432 · 5 наборов', st: 'ok', stl: 'Подключено' },
+        { ab: 'CH', name: 'ClickHouse · события', host: 'ch.internal:8123 · 2 набора', st: 'ok', stl: 'Подключено' },
+        { ab: 'S3', name: 'Объектное хранилище · Parquet', host: 's3://lake/logistics · 1 набор', st: 'warn', stl: 'Медленный ответ' },
+        { ab: 'CSV', name: 'Загрузка файлов', host: 'вручную · 1 набор', st: 'idle', stl: 'Вручную' }
+      ],
+      team: [
+        { ab: 'АС', name: 'Алия Сейткали', mail: 'aliya@company.kz', role: 'Администратор', bg: '#0E0F12', fg: '#C9EC5F' },
+        { ab: 'ДН', name: 'Данияр Нуров', mail: 'daniyar@company.kz', role: 'Инженер данных', bg: '#EEEEE9', fg: '#0E0F12' },
+        { ab: 'МК', name: 'Мария Ким', mail: 'maria@company.kz', role: 'Аналитик', bg: '#EEEEE9', fg: '#0E0F12' },
+        { ab: 'ТА', name: 'Тимур Абенов', mail: 'timur@company.kz', role: 'Владелец данных', bg: '#EEEEE9', fg: '#0E0F12' }
+      ],
+      actlog: [
+        { t: '15.10 09:20', u: 'Д. Нуров', a: 'Принял правило between(amount, 0, 2 450 000)' },
+        { t: '15.10 09:14', u: 'Система', a: 'Сформирован отчёт по проверке № 2814' },
+        { t: '15.10 08:02', u: 'А. Сейткали', a: 'Изменил порог дрейфа PSI с 0.25 на 0.20' },
+        { t: '14.10 18:31', u: 'Т. Абенов', a: 'Назначил ответственного по инциденту INC-0412' },
+        { t: '14.10 11:05', u: 'М. Ким', a: 'Добавила регламент для crm.customers' }
+      ],
+      genOn: S.gen >= 0,
+      genSteps: GS.map((l, i) => ({ l: l, cls: i < S.gen ? 'on' : (i === S.gen ? 'cur' : '') })),
+      toast: S.toast,
+      bootOn: S.boot !== 'off', bootCls: S.boot === 'out' ? 'out' : '',
+      noop: () => {}
+    };
+  }
+}
+</script>
+</body>
+</html>

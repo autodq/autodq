@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="ru"><head><style>
+    .sc-placeholder{background:color-mix(in srgb,currentColor 8%,transparent);
+      border:1px solid color-mix(in srgb,currentColor 50%,transparent);
+      border-radius:2px;box-sizing:border-box;overflow:hidden}
+    @keyframes sc-shine{0%{background-position:100% 50%}100%{background-position:0% 50%}}
+    html.sc-dc-streaming .sc-placeholder,
+    html.sc-dc-streaming .sc-interp.sc-missing{position:relative;
+      background:color-mix(in srgb,currentColor 5%,transparent);
+      border-color:transparent}
+    html.sc-dc-streaming .sc-placeholder::before,
+    html.sc-dc-streaming .sc-interp.sc-missing::before{content:'';
+      position:absolute;inset:0;pointer-events:none;
+      background:linear-gradient(90deg,rgba(217,119,87,0) 25%,rgba(247,225,211,.95) 37%,rgba(217,119,87,0) 63%);
+      background-size:400% 100%;animation:sc-shine 1.4s ease infinite}
+    html.sc-dc-streaming .sc-placeholder:nth-child(n+9 of .sc-placeholder)::before,
+    html.sc-dc-streaming .sc-interp.sc-missing:nth-child(n+9 of .sc-interp.sc-missing)::before{animation:none;
+      background:color-mix(in srgb,currentColor 8%,transparent)}
+    .sc-placeholder-error{padding:4px 8px;font:11px/1.4 ui-monospace,monospace;
+      color:color-mix(in srgb,currentColor 70%,transparent);word-break:break-word}
+    .sc-interp.sc-missing{display:inline-block;width:2em;height:1em;overflow:hidden;
+      vertical-align:text-bottom;background:rgba(255,255,255,.3);border:1px solid rgba(0,0,0,.5);
+      border-radius:2px;box-sizing:border-box;color:transparent;
+      user-select:none}
+    .sc-interp.sc-unresolved{font-family:ui-monospace,monospace;font-size:.85em;
+      color:color-mix(in srgb,currentColor 50%,transparent);
+      background:color-mix(in srgb,currentColor 10%,transparent);border-radius:3px;
+      padding:0 3px}
+    .sc-host.sc-has-error{position:relative}
+    .sc-logic-error{position:absolute;top:8px;left:8px;z-index:2147483647;max-width:60ch;
+      padding:6px 10px;background:#b00020;color:#fff;font:12px/1.4 ui-monospace,monospace;
+      border-radius:4px;white-space:pre-wrap;pointer-events:none}
+    /* Mirrors PRINT_BASELINE_CSS in apps/web deck-stage-export.ts — keep both
+       in sync until dc-runtime regains a build step. */
+    @media print {
+      @page { margin: 0.5cm; }
+      figure, table { break-inside: avoid; }
+      #dc-root, #dc-root > .sc-host { height: auto; }
+      *, *::before, *::after {
+        print-color-adjust: exact; -webkit-print-color-adjust: exact;
+        backdrop-filter: none !important; -webkit-backdrop-filter: none !important;
+        animation-delay: -99s !important; animation-duration: .001s !important;
+        animation-iteration-count: 1 !important; animation-fill-mode: both !important;
+        animation-play-state: running !important; transition-duration: 0s !important;
+      }
+    }
+  </style>
+<meta charset="utf-8">
+<title>autodq — вход</title>
+<style>x-dc{display:none!important}</style>
+<link rel="preconnect" href="https://fonts.googleapis.com" data-dc-tpl="1"><link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;family=Montserrat+Alternates:wght@600&amp;display=swap" rel="stylesheet" data-dc-tpl="2"><style data-dc-tpl="3">
+body{margin:0}
+a{color:#0E0F12}a:hover{color:#4F6413}
+.m{font-family:'JetBrains Mono',ui-monospace,Menlo,monospace}
+
+.lg .ring{fill:none;stroke:#F2F2EE;stroke-width:14;stroke-linecap:round;stroke-dasharray:100;animation:rDraw 1.6s cubic-bezier(.65,0,.35,1) .3s both}
+@keyframes rDraw{from{stroke-dashoffset:100}to{stroke-dashoffset:0}}
+.lg .orbit{transform-box:view-box;transform-origin:54px 54px;animation:orbit 1.6s cubic-bezier(.65,0,.35,1) .3s both}
+@keyframes orbit{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.lg .drop{animation:drop .6s cubic-bezier(.65,0,.35,1) 1.95s both}
+@keyframes drop{from{transform:translateY(0)}to{transform:translateY(30px)}}
+.lg .core{transform-box:fill-box;transform-origin:50% 50%;animation:coreIn .4s cubic-bezier(.22,1,.36,1) .1s both,coreGrow .7s cubic-bezier(.22,1,.36,1) 2.05s forwards,breathe 2.6s cubic-bezier(.45,0,.55,1) 3s infinite alternate}
+@keyframes coreIn{from{transform:scale(0)}to{transform:scale(1)}}
+@keyframes coreGrow{from{transform:scale(1)}to{transform:scale(2.67)}}
+@keyframes breathe{from{transform:scale(2.67)}to{transform:scale(2.4)}}
+.lg .tail{fill:none;stroke:#F2F2EE;stroke-width:14;stroke-linecap:round;stroke-dasharray:100;animation:rDraw .6s cubic-bezier(.65,0,.35,1) 2.3s both}
+
+.up{animation:up .7s cubic-bezier(.22,1,.36,1) both}
+.d1{animation-delay:.08s}.d2{animation-delay:.16s}.d3{animation-delay:.24s}.d4{animation-delay:.32s}.d5{animation-delay:.4s}
+.late{animation-delay:2.6s}.late2{animation-delay:2.75s}.late3{animation-delay:2.9s}
+@keyframes up{from{opacity:0;transform:translateY(14px);filter:blur(4px)}to{opacity:1;transform:none;filter:blur(0)}}
+
+.pr .arc{transform-box:view-box;transform-origin:60px 60px;animation:spin 1.4s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.field{display:flex;flex-direction:column;gap:8px}
+.field label{font-size:13px;font-weight:600}
+.field input{height:52px;border-radius:12px;border:1px solid #D6D6CF;background:#FFFFFF;padding:0 16px;font:500 15px 'JetBrains Mono',ui-monospace,monospace;color:#0E0F12;outline:none;transition:border-color .25s,box-shadow .25s}
+.field input:focus{border-color:#0E0F12;box-shadow:0 0 0 4px #EEF5D9}
+.cta{position:relative;display:flex;align-items:center;justify-content:center;gap:10px;height:54px;border-radius:12px;background:#0E0F12;color:#F2F2EE;text-decoration:none;font-weight:600;font-size:16px;overflow:hidden;transition:transform .4s cubic-bezier(.22,1,.36,1)}
+.cta:hover{color:#F2F2EE;transform:translateY(-1px)}
+.cta i{width:8px;height:8px;border-radius:50%;background:#C9EC5F;transition:transform .4s cubic-bezier(.22,1,.36,1)}
+.cta:hover i{transform:scale(1.5)}
+.wm{font-family:'Montserrat Alternates','Montserrat',system-ui,sans-serif;font-weight:600;letter-spacing:-0.045em}
+.ghost{display:flex;align-items:center;justify-content:center;gap:10px;height:52px;border-radius:12px;border:1px solid #D6D6CF;background:#FFFFFF;color:#0E0F12;font:500 15px 'Onest',system-ui,sans-serif;cursor:pointer;transition:border-color .25s}
+.ghost:hover{border-color:#0E0F12}
+.seg{position:relative;display:flex;padding:4px;border-radius:14px;background:#E6E6E0}
+.seg button{flex:1;height:42px;border:0;border-radius:10px;background:transparent;font:500 14px 'Onest',system-ui,sans-serif;color:#66686E;cursor:pointer;position:relative;z-index:1;transition:color .35s}
+.seg button.on{color:#0E0F12}
+.pill{position:absolute;top:4px;left:4px;width:calc(50% - 4px);height:42px;border-radius:10px;background:#FFFFFF;box-shadow:0 1px 2px rgba(14,15,18,.06),0 6px 16px rgba(14,15,18,.06);transition:transform .5s cubic-bezier(.65,0,.35,1)}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+</style></head>
+<body>
+<div id="dc-root"><div class="sc-host" data-sc-name="Login"><div data-dc-tpl="4" style="min-height: 100vh; background: rgb(242, 242, 238); color: rgb(14, 15, 18); font-family: Onest, system-ui, sans-serif; display: flex; flex-wrap: wrap;">
+
+  <section data-dc-tpl="5" style="flex: 1 1 520px; min-height: 560px; background: rgb(14, 15, 18); color: rgb(242, 242, 238); padding: 48px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; gap: 40px;">
+    <div data-dc-tpl="6" style="display: flex; align-items: center; gap: 12px;">
+      <svg data-dc-tpl="7" viewBox="0 0 120 120" aria-hidden="true" style="width: 30px; height: 30px; margin: 3px 0px 0px 3px;"><circle data-dc-tpl="8" cx="54" cy="54" r="30" fill="none" stroke="#F2F2EE" stroke-width="16"></circle><path data-dc-tpl="9" d="M84 56 V104" stroke="#F2F2EE" stroke-width="16" stroke-linecap="round"></path><circle data-dc-tpl="10" cx="54" cy="54" r="12" fill="#C9EC5F"></circle></svg>
+      <span data-dc-tpl="11" class="wm" style="font-size: 22px;">autodq</span>
+    </div>
+
+    <div data-dc-tpl="12" style="display: flex; flex-direction: column; align-items: center; gap: 40px;">
+      <svg data-dc-tpl="13" class="lg" viewBox="0 0 120 120" aria-hidden="true" style="width: 240px; height: 240px; overflow: visible;">
+        <circle data-dc-tpl="14" cx="54" cy="54" r="30" fill="none" stroke="#1C1D22" stroke-width="14"></circle>
+        <g data-dc-tpl="15" style="transform-box: view-box; transform-origin: 54px 54px; transform: rotate(-90deg);"><circle data-dc-tpl="16" class="ring" cx="54" cy="54" r="30" pathLength="100"></circle></g>
+        <path data-dc-tpl="17" class="tail" d="M84 56 V112" pathLength="100"></path>
+        <g data-dc-tpl="18" class="orbit"><g data-dc-tpl="19" class="drop"><circle data-dc-tpl="20" class="core" cx="54" cy="24" r="4.5" fill="#C9EC5F"></circle></g></g>
+      </svg>
+      <div data-dc-tpl="21" class="pr" style="width: 100%; max-width: 420px; display: flex; flex-direction: column; gap: 2px;">
+        
+          <div data-dc-tpl="23" class="m up late" style="display: grid; grid-template-columns: 22px 1fr auto; gap: 14px; align-items: center; height: 44px; border-bottom: 1px solid rgb(31, 32, 37); font-size: 13px;">
+            <svg data-dc-tpl="24" viewBox="0 0 120 120" aria-hidden="true" style="width: 20px; height: 20px; overflow: visible;"><circle data-dc-tpl="25" cx="60" cy="60" r="36" fill="none" stroke="#2A2B31" stroke-width="18"></circle><circle data-dc-tpl="32" cx="60" cy="60" r="36" fill="none" stroke="#F2F2EE" stroke-width="18"></circle><circle data-dc-tpl="33" cx="60" cy="60" r="14" fill="#C9EC5F"></circle></svg>
+            <span data-dc-tpl="34" style="color: rgb(242, 242, 238);"><span class="sc-interp">sales.orders</span></span>
+            <span data-dc-tpl="35" style="color: rgb(140, 142, 148);"><span class="sc-interp">176 / 184 правил</span></span>
+          </div>
+        
+          <div data-dc-tpl="23" class="m up late2" style="display: grid; grid-template-columns: 22px 1fr auto; gap: 14px; align-items: center; height: 44px; border-bottom: 1px solid rgb(31, 32, 37); font-size: 13px;">
+            <svg data-dc-tpl="24" viewBox="0 0 120 120" aria-hidden="true" style="width: 20px; height: 20px; overflow: visible;"><circle data-dc-tpl="25" cx="60" cy="60" r="36" fill="none" stroke="#2A2B31" stroke-width="18"></circle><circle data-dc-tpl="32" cx="60" cy="60" r="36" fill="none" stroke="#F2F2EE" stroke-width="18"></circle><circle data-dc-tpl="33" cx="60" cy="60" r="14" fill="#C9EC5F"></circle></svg>
+            <span data-dc-tpl="34" style="color: rgb(242, 242, 238);"><span class="sc-interp">billing.payments</span></span>
+            <span data-dc-tpl="35" style="color: rgb(140, 142, 148);"><span class="sc-interp">131 / 132 правил</span></span>
+          </div>
+        
+          <div data-dc-tpl="23" class="m up late3" style="display: grid; grid-template-columns: 22px 1fr auto; gap: 14px; align-items: center; height: 44px; border-bottom: 1px solid rgb(31, 32, 37); font-size: 13px;">
+            <svg data-dc-tpl="24" viewBox="0 0 120 120" aria-hidden="true" style="width: 20px; height: 20px; overflow: visible;"><circle data-dc-tpl="25" cx="60" cy="60" r="36" fill="none" stroke="#2A2B31" stroke-width="18"></circle><g data-dc-tpl="27" class="arc"><g data-dc-tpl="28" style="transform-box: view-box; transform-origin: 60px 60px; transform: rotate(-90deg);"><circle data-dc-tpl="29" cx="60" cy="60" r="36" fill="none" stroke="#F2F2EE" stroke-width="18" stroke-linecap="round" pathLength="100" style="stroke-dasharray: 22, 78; stroke-dashoffset: 22;"></circle></g><circle data-dc-tpl="30" cx="60" cy="24" r="10" fill="#C9EC5F"></circle></g></svg>
+            <span data-dc-tpl="34" style="color: rgb(242, 242, 238);"><span class="sc-interp">finance.ledger</span></span>
+            <span data-dc-tpl="35" style="color: rgb(140, 142, 148);"><span class="sc-interp">профилирование</span></span>
+          </div>
+        
+      </div>
+    </div>
+
+    <div data-dc-tpl="36" class="m" style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; font-size: 12px; color: rgb(140, 142, 148);">
+      <span data-dc-tpl="37">v0.1 · прототип</span>
+      <span data-dc-tpl="38" style="display: flex; align-items: center; gap: 8px;"><i data-dc-tpl="39" style="width: 6px; height: 6px; border-radius: 50%; background: rgb(201, 236, 95);"></i>все сервисы работают</span>
+    </div>
+  </section>
+
+  <section data-dc-tpl="40" style="flex: 1 1 480px; display: flex; align-items: center; justify-content: center; padding: 56px 24px; box-sizing: border-box;">
+    <div data-dc-tpl="41" style="width: 100%; max-width: 400px; display: flex; flex-direction: column; gap: 28px;">
+      <div data-dc-tpl="42" class="up d1" style="display: flex; flex-direction: column; gap: 8px;">
+        <h1 data-dc-tpl="43" style="margin: 0px; font-size: 30px; font-weight: 600; letter-spacing: -0.02em;"><span class="sc-interp">Вход</span></h1>
+        <p data-dc-tpl="44" style="margin: 0px; font-size: 15px; line-height: 1.5; color: rgb(102, 104, 110);"><span class="sc-interp">Войдите в рабочее пространство вашей команды.</span></p>
+      </div>
+      <div data-dc-tpl="45" class="seg up d2">
+        <div data-dc-tpl="46" class="pill" style="transform: translateX(0%);"></div>
+        <button data-dc-tpl="47" type="button" class="on">Вход</button>
+        <button data-dc-tpl="48" type="button" class="">Активация лицензии</button>
+      </div>
+
+      
+        <div data-dc-tpl="50" style="display: flex; flex-direction: column; gap: 18px;">
+          <div data-dc-tpl="51" class="field up d1"><label data-dc-tpl="52" for="em">Рабочая почта</label><input data-dc-tpl="53" id="em" type="email" value="name@company.kz" readonly=""></div>
+          <div data-dc-tpl="54" class="field up d2">
+            <div data-dc-tpl="55" style="display: flex; justify-content: space-between;"><label data-dc-tpl="56" for="pw">Пароль</label><a data-dc-tpl="57" href="#" style="font-size: 13px; font-weight: 600; color: rgb(102, 104, 110); text-decoration: none;">Забыли пароль?</a></div>
+            <input data-dc-tpl="58" id="pw" type="password" value="password123" readonly="">
+          </div>
+          <a data-dc-tpl="59" class="cta up d3" href="App.dc.html">Войти<i data-dc-tpl="60"></i></a>
+          <div data-dc-tpl="61" class="up d4" style="display: flex; align-items: center; gap: 12px; color: rgb(102, 104, 110); font-size: 13px;"><span data-dc-tpl="62" style="flex: 1 1 0%; height: 1px; background: rgb(214, 214, 207);"></span>или<span data-dc-tpl="63" style="flex: 1 1 0%; height: 1px; background: rgb(214, 214, 207);"></span></div>
+          <button data-dc-tpl="64" type="button" class="ghost up d5">
+            <svg data-dc-tpl="65" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect data-dc-tpl="66" x="4" y="10" width="16" height="10" rx="2"></rect><path data-dc-tpl="67" d="M8 10V7a4 4 0 0 1 8 0v3"></path></svg>
+            Войти через SSO
+          </button>
+        </div>
+      
+
+      
+
+      <p data-dc-tpl="81" class="up d5" style="margin: 0px; font-size: 13px; color: rgb(102, 104, 110);">Нет доступа — напишите администратору вашей организации.</p>
+    </div>
+  </section></div></div></div>
+
+
+
+</body></html>
