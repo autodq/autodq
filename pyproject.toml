@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "autodq-engine"
+version = "0.1.0"
+description = "Statistical profiling, quality rule discovery and validation for tabular data"
+requires-python = ">=3.11"
+dependencies = ["numpy>=2.2,<3", "scipy>=1.15,<2", "pydantic>=2.10,<3"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8,<10", "mypy>=1.15,<2"]
+api = ["fastapi>=0.115,<1", "uvicorn>=0.34,<1"]
+
+[project.scripts]
+autodq = "autodq.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["engine"]
+
+[tool.setuptools.package-data]
+autodq = ["py.typed"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["engine"]
+
+[tool.mypy]
+strict = true
+files = ["engine/autodq"]
+
+[[tool.mypy.overrides]]
+module = ["scipy.*"]
+ignore_missing_imports = true
